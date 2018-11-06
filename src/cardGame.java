@@ -17,7 +17,7 @@ public class cardGame {
     public static void main (String[] args){
         // STEP1: initiate the library by loading data from 3 text files
         System.out.println("**************************************************");
-        System.out.println("***          Welcome to the Cards.Card Game          ***");
+        System.out.println("***          Welcome to the Card Game          ***");
         System.out.println("**************************************************");
         //System.out.println("*** Please input the number of players:");
 

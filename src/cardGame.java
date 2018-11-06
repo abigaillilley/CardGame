@@ -22,6 +22,7 @@ public class cardGame {
         System.out.println("**************************************************");
 
         boolean validPlayerNum = false;
+        ArrayList<Integer> packHolder = new ArrayList<>();
 
         while (!validPlayerNum) {
 
@@ -33,10 +34,9 @@ public class cardGame {
                 if (playerNum > 1) {
 
                     System.out.println("*** Your game has " + playerNum + " players");
-                    //input.close();
                     validPlayerNum = true;
 
-                    getPack(playerNum);
+                    packHolder = getPack(playerNum);
 
                 } else {
 
@@ -50,7 +50,7 @@ public class cardGame {
         }
     }
 
-    private static void getPack(int numPlayers) {
+    private static ArrayList<Integer> getPack(int numPlayers) {
 
         Boolean gotPack = false;
         String fileIn;
@@ -92,6 +92,7 @@ public class cardGame {
                     if (packHolder.size() == numPlayers*8) {
 
                         gotPack = true;
+
                     } else {
                         System.out.println("*** Incorrect number of cards");
                     }
@@ -107,6 +108,7 @@ public class cardGame {
                 System.out.println("*** Non integer value found in pack");
             }
         }
+        return packHolder;
     }
 
 

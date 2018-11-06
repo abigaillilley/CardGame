@@ -1,3 +1,5 @@
+import FileIO.Reader;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.nio.file.Path;
@@ -15,7 +17,7 @@ public class cardGame {
     public static void main (String[] args){
         // STEP1: initiate the library by loading data from 3 text files
         System.out.println("**************************************************");
-        System.out.println("***          Welcome to the Card Game          ***");
+        System.out.println("***          Welcome to the Cards.Card Game          ***");
         System.out.println("**************************************************");
         //System.out.println("*** Please input the number of players:");
 
@@ -93,6 +95,7 @@ public class cardGame {
             //dont want to catch
             System.out.println("Non integer value found in pack");
         }
+
     }
 
     /**
@@ -113,7 +116,7 @@ public class cardGame {
     /*public static int[] validatePack(String filepath) {
 
         try {
-            Reader packReader = new Reader(filePath);
+            FileIO.Reader packReader = new FileIO.Reader(filePath);
             int pack = packReader.next();
             int[] packArray;
 

@@ -21,8 +21,6 @@ public class cardGame {
         System.out.println("***          Welcome to the Card Game          ***");
         System.out.println("**************************************************");
 
-        System.out.println("ABigail was here");
-
         boolean validPlayerNum = false;
         ArrayList<Integer> packHolder = new ArrayList<>();
 

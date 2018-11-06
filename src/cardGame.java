@@ -22,6 +22,7 @@ public class cardGame {
         //System.out.println("*** Please input the number of players:");
 
         boolean validPlayerNum = false;
+        System.out.println("Sophia was here");
 
         while (!validPlayerNum) {
 

@@ -16,21 +16,16 @@ public class cardGame {
      *
      */
     public static void main (String[] args){
-        // STEP1: initiate the library by loading data from 3 text files
+
         System.out.println("**************************************************");
         System.out.println("***          Welcome to the Card Game          ***");
         System.out.println("**************************************************");
-        //System.out.println("*** Please input the number of players:");
 
         boolean validPlayerNum = false;
 
         while (!validPlayerNum) {
 
             try {
-
-                //Scanner input = new Scanner(System.in);
-                //int playerNum = input.nextInt();
-                //input.nextLine();
 
                 String playerNumStr = getInput("*** Please input the number of players:");
                 int playerNum = Integer.parseInt(playerNumStr);
@@ -41,7 +36,7 @@ public class cardGame {
                     //input.close();
                     validPlayerNum = true;
 
-                    getPack();
+                    getPack(playerNum);
 
                 } else {
 
@@ -55,7 +50,7 @@ public class cardGame {
         }
     }
 
-    private static void getPack() {
+    private static void getPack(int numPlayers) {
 
         Boolean gotPack = false;
         String fileIn;
@@ -67,6 +62,7 @@ public class cardGame {
             Path fullPath;
             String userDir = System.getProperty("user.dir");
             fullPath = Paths.get(userDir, fileIn);
+            System.out.println(fullPath);
 
             try {
                 Boolean validPack = true;
@@ -92,24 +88,25 @@ public class cardGame {
                     pack = packReader.next();
                 }
                 if (validPack) {
-                    gotPack = true;
+
+                    if (packHolder.size() == numPlayers*8) {
+
+                        gotPack = true;
+                    } else {
+                        System.out.println("*** Incorrect number of cards");
+                    }
                 }
                 packReader.close();
 
-                //return validPack;
-
-
             } catch (IOException e) {
-                //e.printStackTrace();
+
                 System.out.println("*** Error found in file path");
-                //return false;
 
             } catch (NumberFormatException e) {
+
                 System.out.println("*** Non integer value found in pack");
-                //return false;
             }
         }
-        System.out.println(packHolder);
     }
 
 
@@ -125,35 +122,6 @@ public class cardGame {
 
         return inputScanner.nextLine();
     }
-
 }
 
-    /*public static int[] validatePack(String filepath) {
-
-        try {
-            FileIO.Reader packReader = new FileIO.Reader(filePath);
-            int pack = packReader.next();
-            int[] packArray;
-
-            while (pack != null) {
-
-                if (pack > 0) {
-
-                    packArray.add(pack);
-                    pack = packReader.next();
-
-                } else {
-
-                    packReader.close();
-                    System.out.println("Invalid pack, please input the path to a file without negative integers.");
-                    break;
-
-                }
-            }
-            packReader.close();
-        } catch (IOException e) {
-            // TODO catch exception where input isn't a single integer i.e. 'abc' or '6 8'
-            e.printStackTrace();
-        }
-    }*/
 

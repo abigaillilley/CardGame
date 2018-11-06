@@ -1,5 +1,6 @@
 import FileIO.Reader;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.nio.file.Path;
@@ -22,7 +23,6 @@ public class cardGame {
         //System.out.println("*** Please input the number of players:");
 
         boolean validPlayerNum = false;
-        System.out.println("Sophia was here");
 
         while (!validPlayerNum) {
 
@@ -37,7 +37,7 @@ public class cardGame {
 
                 if (playerNum > 1) {
 
-                    System.out.println("*** Your game has " + playerNum + " players.");
+                    System.out.println("*** Your game has " + playerNum + " players");
                     //input.close();
                     validPlayerNum = true;
 
@@ -57,47 +57,61 @@ public class cardGame {
 
     private static void getPack() {
 
-        String fileIn = getInput("*** Please input the pack file:");
+        Boolean gotPack = false;
+        String fileIn;
+        ArrayList<Integer> packHolder = new ArrayList<>();
+        while (!gotPack) {
 
-        validatePack(fileIn);
-    }
+            fileIn = getInput("*** Please input a valid pack file:");
 
-    private static Boolean validatePack(String inputPath) {
-        Path fullPath;
-        String userDir = System.getProperty("user.dir");
-        fullPath = Paths.get(userDir, inputPath);
+            Path fullPath;
+            String userDir = System.getProperty("user.dir");
+            fullPath = Paths.get(userDir, fileIn);
 
-        try {
-            Reader packReader = new Reader(fullPath);
-            String[] pack = packReader.next();
-            Boolean validPack = true;
+            try {
+                Boolean validPack = true;
 
+                Reader packReader = new Reader(fullPath);
+                String[] pack = packReader.next();
 
-            while (pack != null) {
-                int testNum = Integer.parseInt(pack[0]);
+                while (pack != null) {
+                    int testNum = Integer.parseInt(pack[0]);
 
-                if (testNum > 0) {
+                    if (testNum > 0) {
 
-                } else {
-                    System.out.println("Invalid number (negative or zero) in pack");
-                    validPack = false;
-                    break;
+                        validPack = true;
+                        packHolder.add(testNum);
+
+                    } else {
+                        System.out.println("*** Invalid number (negative or zero) in pack");
+                        packHolder.clear();
+                        validPack = false;
+                        break;
+                    }
+
+                    pack = packReader.next();
                 }
+                if (validPack) {
+                    gotPack = true;
+                }
+                packReader.close();
 
-                pack = packReader.next();
+                //return validPack;
+
+
+            } catch (IOException e) {
+                //e.printStackTrace();
+                System.out.println("*** Error found in file path");
+                //return false;
+
+            } catch (NumberFormatException e) {
+                System.out.println("*** Non integer value found in pack");
+                //return false;
             }
-            packReader.close();
-
-            return validPack;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            //dont want to catch
-            System.out.println("Non integer value found in pack");
         }
-
+        System.out.println(packHolder);
     }
+
 
     /**
      * Displays a prompt and awaits next string user input.

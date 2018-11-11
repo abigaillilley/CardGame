@@ -19,7 +19,6 @@ public class Reader{
         line = reader.readLine();
         if (line != null){
             info = line.split(" ");
-            //info.add(line);
             return info;
         }
         return null;

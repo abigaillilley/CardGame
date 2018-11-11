@@ -21,22 +21,24 @@ public class cardGame {
         System.out.println("***          Welcome to the Card Game          ***");
         System.out.println("**************************************************");
 
-        boolean validPlayerNum = false;
+        boolean validTotalNumPlayers = false;
         ArrayList<Integer> packHolder = new ArrayList<>();
 
-        while (!validPlayerNum) {
+        while (!validTotalNumPlayers) {
 
             try {
 
-                String playerNumStr = getInput("*** Please input the number of players:");
-                int playerNum = Integer.parseInt(playerNumStr);
+                String totalNumPlayersStr = getInput("*** Please input the number of players:");
+                int totalNumPlayers = Integer.parseInt(totalNumPlayersStr);
 
-                if (playerNum > 1) {
+                if (totalNumPlayers> 1) {
 
-                    System.out.println("*** Your game has " + playerNum + " players");
-                    validPlayerNum = true;
+                    System.out.println("*** Your game has " + totalNumPlayers+ " players");
+                    validTotalNumPlayers = true;
 
-                    packHolder = getPack(playerNum);
+                    packHolder = getPack(totalNumPlayers); //Integer array of card numbers
+
+                    distributeCards(packHolder, totalNumPlayers);
 
                 } else {
 
@@ -109,6 +111,10 @@ public class cardGame {
             }
         }
         return packHolder;
+    }
+
+    private static void distributeCards(ArrayList<Integer> pack, int totalNumPlayers) {
+        //TODO distribute cards round robin
     }
 
 

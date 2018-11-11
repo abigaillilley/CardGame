@@ -1,4 +1,4 @@
-import Cards.Card;
+import Cards.*;
 
 import java.util.ArrayList;
 
@@ -12,15 +12,40 @@ public class Player {
         this.hand = hand;
         this.playerNum = playerNum;
         this.totalNumPlayers = totalNumPlayers;
+        //TODO look at concurrency lecture, don't use 'this' in a constructor????????????
     }
 
 
-    public static synchronized Boolean turn()
+    public Boolean turn(ArrayList<CardDeck> deckArray)
+            //returns true if a player has won on this turn
     {
+        synchronized (Player.class) {
 
-        int pickUpDeckNum = (this.playerNum - 1) % this.totalNumPlayers
+            int pickUpDeckIndex = this.playerNum - 1;
+            CardDeck deck = deckArray.get(pickUpDeckIndex);
+            Card topCard = deck.pickUp();
+            hand.add(topCard);
 
-        this.hand.add(
+            for (int i=0; i < totalNumPlayers; i++) {
+                if (playerNum != hand.get(i).getValue()) {
+                    deck.putDown(hand.get(i));
+                    hand.remove(i);
+                    break;
+                }
+            }
+            return checkForWin(hand);
+        }
     }
 
+    public static synchronized Boolean checkForWin(ArrayList<Card> hand) {
+
+        boolean allEqual = true;
+        for (Card c : hand) {
+            if(c.getValue() != hand.get(0).getValue()) {
+                allEqual = false;
+                break;
+            }
+        }
+        return allEqual;
+    }
 }

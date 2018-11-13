@@ -5,7 +5,7 @@ public class Card {
     private final int value;
     //private static int counter = 0;
 
-    Card(int value){
+    public Card(int value){
 
         this.value = value;
     }

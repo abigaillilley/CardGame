@@ -9,7 +9,7 @@ public class CardDeck {
     private volatile ArrayList<Card> deck;
 
 
-    CardDeck(ArrayList<Card> cards){
+    public CardDeck(ArrayList<Card> cards){
 
         //this.deckNumber = deckNumber;
         this.deck = cards;
@@ -28,6 +28,7 @@ public class CardDeck {
         deck.add(discardCard);
     }
 
-
-
+    public ArrayList<Card> getDeck() {
+        return deck;
+    }
 }

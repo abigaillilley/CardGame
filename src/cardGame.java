@@ -125,10 +125,7 @@ public class cardGame {
 
         for (int i=0; i < totalNumPlayers; i++) {
 
-            Card firstCard = new Card(pack.get(i));
-
             ArrayList<Card> hand = new ArrayList<>();
-            hand.add(firstCard);
 
             for (int j = i; j < (4*totalNumPlayers); j+=totalNumPlayers) {
                 Card nextCard = new Card(pack.get(j));
@@ -138,15 +135,13 @@ public class cardGame {
             playerArray.add(new Player(hand, i+1, totalNumPlayers));
         }
 
-        for (int i = 1; i < totalNumPlayers + 1; i++) {
+        for (int i = 0; i < totalNumPlayers; i++) {
 
             int deckCardsStartIndex = (totalNumPlayers * 4);
-            Card firstCard = new Card(pack.get(deckCardsStartIndex) + i);
 
             ArrayList<Card> deck = new ArrayList<>();
-            deck.add(firstCard);
 
-            for (int j = deckCardsStartIndex; j < (8*totalNumPlayers); j+=totalNumPlayers) {
+            for (int j = deckCardsStartIndex + i; j < (8*totalNumPlayers); j+=totalNumPlayers) {
                 Card nextCard = new Card(pack.get(j));
                 deck.add(nextCard);
             }
@@ -159,13 +154,21 @@ public class cardGame {
 
 
         for (CardDeck deck1 :deckArray){
-            System.out.println("------------------");
+            System.out.println("--------deck----------");
             ArrayList<Card> cards2= deck1.getDeck();
             for (Card card: cards2) {
                 System.out.println(card.getValue());
             }
+        }
+
+        for (Player player :playerArray){
+            System.out.println("-------------hand-----");
+            ArrayList<Card> hand = player.getHand();
+            for (Card card: hand) {
+                System.out.println(card.getValue());
             }
         }
+    }
 
 
 

@@ -2,7 +2,7 @@ import Cards.*;
 
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Runnable {
 
     private ArrayList<Card> hand;
     private int playerNum;

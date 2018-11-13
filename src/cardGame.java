@@ -26,7 +26,7 @@ public class cardGame {
         System.out.println("**************************************************");
 
         boolean validTotalNumPlayers = false;
-        ArrayList<Integer> packHolder = new ArrayList<>();
+        ArrayList<Integer> packHolder;
 
         while (!validTotalNumPlayers) {
 
@@ -45,21 +45,25 @@ public class cardGame {
                     ArrayList<Player> playerArray = distributePlayerCards(packHolder, totalNumPlayers);
                     ArrayList<CardDeck> deckArray = distributeDeckCards(packHolder, totalNumPlayers);
 
-                    for (Player player :playerArray){
-                        System.out.println("--------hand--------");
-                        ArrayList<Card> hand = player.getHand();
-                        for (Card card: hand) {
-                            System.out.println(card.getValue());
-                        }
+                    for (Player player: playerArray) {
+                        Thread playerThread = new Thread(player);
                     }
 
-                    for (CardDeck deck1 :deckArray){
-                        System.out.println("---------deck---------");
-                        ArrayList<Card> cards2= deck1.getDeck();
-                        for (Card card: cards2) {
-                            System.out.println(card.getValue());
-                        }
-                    }
+//                    for (Player player :playerArray){
+//                        System.out.println("--------hand--------");
+//                        ArrayList<Card> hand = player.getHand();
+//                        for (Card card: hand) {
+//                            System.out.println(card.getValue());
+//                        }
+//                    }
+//
+//                    for (CardDeck deck1 :deckArray){
+//                        System.out.println("---------deck---------");
+//                        ArrayList<Card> cards2= deck1.getDeck();
+//                        for (Card card: cards2) {
+//                            System.out.println(card.getValue());
+//                        }
+//                    }
 
                 } else {
 
@@ -135,7 +139,6 @@ public class cardGame {
     }
 
     private static ArrayList<Player> distributePlayerCards(ArrayList<Integer> pack, int totalNumPlayers) {
-        //TODO distribute cards round robin
 
         ArrayList<Player> playerArray = new ArrayList<>();
 

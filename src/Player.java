@@ -48,4 +48,8 @@ public class Player {
         }
         return allEqual;
     }
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
 }

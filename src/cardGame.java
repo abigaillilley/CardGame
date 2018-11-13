@@ -1,9 +1,5 @@
-import Cards.*;
-
-import Cards.CardDeck;
 import FileIO.Reader;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -120,54 +116,7 @@ public class cardGame {
     private static void distributeCards(ArrayList<Integer> pack, int totalNumPlayers) {
         //TODO distribute cards round robin
 
-        ArrayList<Player> playerArray = new ArrayList<>();
-        ArrayList<CardDeck> deckArray = new ArrayList<>();
-
-        for (int i=0; i < totalNumPlayers; i++) {
-
-            Card firstCard = new Card(pack.get(i));
-
-            ArrayList<Card> hand = new ArrayList<>();
-            hand.add(firstCard);
-
-            for (int j = i; j < (4*totalNumPlayers); j+=totalNumPlayers) {
-                Card nextCard = new Card(pack.get(j));
-                hand.add(nextCard);
-            }
-
-            playerArray.add(new Player(hand, i+1, totalNumPlayers));
-        }
-
-        for (int i = 1; i < totalNumPlayers + 1; i++) {
-
-            int deckCardsStartIndex = (totalNumPlayers * 4);
-            Card firstCard = new Card(pack.get(deckCardsStartIndex) + i);
-
-            ArrayList<Card> deck = new ArrayList<>();
-            deck.add(firstCard);
-
-            for (int j = deckCardsStartIndex; j < (8*totalNumPlayers); j+=totalNumPlayers) {
-                Card nextCard = new Card(pack.get(j));
-                deck.add(nextCard);
-            }
-
-            deckArray.add(new CardDeck(deck));
-
-
-
-                }
-
-
-        for (CardDeck deck1 :deckArray){
-            System.out.println("------------------");
-            ArrayList<Card> cards2= deck1.getDeck();
-            for (Card card: cards2) {
-                System.out.println(card.getValue());
-            }
-            }
-        }
-
-
+    }
 
 
     /**

@@ -141,35 +141,31 @@ public class cardGame {
 
             ArrayList<Card> deck = new ArrayList<>();
 
-            for (int j = deckCardsStartIndex + i; j < (8*totalNumPlayers); j+=totalNumPlayers) {
+            for (int j = deckCardsStartIndex + i; j < (8 * totalNumPlayers); j += totalNumPlayers) {
                 Card nextCard = new Card(pack.get(j));
                 deck.add(nextCard);
             }
 
             deckArray.add(new CardDeck(deck));
+        }
 
-
-
-                }
-
+        for (Player player :playerArray){
+            System.out.println("--------hand--------");
+            ArrayList<Card> hand = player.getHand();
+            for (Card card: hand) {
+                System.out.println(card.getValue());
+            }
+        }
 
         for (CardDeck deck1 :deckArray){
-            System.out.println("--------deck----------");
+            System.out.println("---------deck---------");
             ArrayList<Card> cards2= deck1.getDeck();
             for (Card card: cards2) {
                 System.out.println(card.getValue());
             }
         }
 
-        for (Player player :playerArray){
-            System.out.println("-------------hand-----");
-            ArrayList<Card> hand = player.getHand();
-            for (Card card: hand) {
-                System.out.println(card.getValue());
-            }
-        }
     }
-
 
 
 

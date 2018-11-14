@@ -46,7 +46,9 @@ public class cardGame {
                     ArrayList<CardDeck> deckArray = distributeDeckCards(packHolder, totalNumPlayers);
 
                     for (Player player: playerArray) {
-                        Thread playerThread = new Thread(player);
+                        //Thread playerThread = new Thread(player);
+                        player.turn(deckArray);
+                        System.out.println(player.getOutputText());
                     }
 
 //                    for (Player player :playerArray){
@@ -151,7 +153,16 @@ public class cardGame {
                 hand.add(nextCard);
             }
 
-            playerArray.add(new Player(hand, i+1, totalNumPlayers));
+            ArrayList<String> cardValues = new ArrayList<>();
+
+            for (Card card: hand) {
+                cardValues.add(Integer.toString(card.getValue()));
+            }
+
+            Player player = new Player(hand, i+1, totalNumPlayers);
+            player.addToOutput("Player " + player.getPlayerNum() + " initial hand: " + cardValues);
+
+            playerArray.add(player);
         }
 
         return playerArray;

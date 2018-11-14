@@ -16,7 +16,8 @@ public class CardDeck {
     }
 
     public Card pickUp(){
-
+        //TODO check there is actually a card to be picked up
+        // if not then the thread needs to wait
         Card topCard = deck.get(0);
         deck.remove(0);
         return topCard;

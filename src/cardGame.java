@@ -42,13 +42,14 @@ public class cardGame {
 
                     packHolder = getPack(totalNumPlayers); //Integer array of card numbers
 
-                    ArrayList<Player> playerArray = distributePlayerCards(packHolder, totalNumPlayers);
                     ArrayList<CardDeck> deckArray = distributeDeckCards(packHolder, totalNumPlayers);
+                    ArrayList<Player> playerArray = distributePlayerCards(packHolder, totalNumPlayers, deckArray);
 
                     for (Player player: playerArray) {
-                        //Thread playerThread = new Thread(player);
-                        player.turn(deckArray);
-                        System.out.println(player.getOutputText());
+                        Thread playerThread = new Thread(player);
+                        playerThread.start();
+                        //player.turn(deckArray);
+                        //System.out.println(player.getOutputText());
                     }
 
 //                    for (Player player :playerArray){
@@ -140,7 +141,7 @@ public class cardGame {
         return packHolder;
     }
 
-    private static ArrayList<Player> distributePlayerCards(ArrayList<Integer> pack, int totalNumPlayers) {
+    private static ArrayList<Player> distributePlayerCards(ArrayList<Integer> pack, int totalNumPlayers, ArrayList<CardDeck> deckArray) {
 
         ArrayList<Player> playerArray = new ArrayList<>();
 
@@ -159,7 +160,7 @@ public class cardGame {
                 cardValues.add(Integer.toString(card.getValue()));
             }
 
-            Player player = new Player(hand, i+1, totalNumPlayers);
+            Player player = new Player(hand, i+1, totalNumPlayers, deckArray);
             player.addToOutput("Player " + player.getPlayerNum() + " initial hand: " + cardValues);
 
             playerArray.add(player);

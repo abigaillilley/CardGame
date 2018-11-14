@@ -2,18 +2,21 @@ import Cards.*;
 
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Runnable {
     //TODO run() method?????????????????????????
 
     private ArrayList<String> outputText = new ArrayList<>();
     private ArrayList<Card> hand;
     private int playerNum;
     private final int totalNumPlayers;
+    private int turnCounter = 0;
+    public static volatile ArrayList<CardDeck> deckArray;
 
-    Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers) {
+    Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
         hand = inputHand;
         playerNum = inputPlayerNum;
         totalNumPlayers = totalPlayers;
+        deckArray = inputCardDecks;
     }
 
 
@@ -48,6 +51,8 @@ public class Player {
                     }
                     this.addToOutput("Player " + this.getPlayerNum() + " current hand: " + cardValues);
 
+                    this.turnCounter += 1;
+
                     break;
                 }
             }
@@ -68,6 +73,12 @@ public class Player {
         return allEqual;
     }
 
+    public static void evenTurns(ArrayList<Player> playerArrayList) {
+    //while your tuns is less than highestTurns, then pickup and put down card
+
+    }
+
+
     public ArrayList<Card> getHand() {
 
         return hand;
@@ -85,5 +96,12 @@ public class Player {
     public void addToOutput(String text) {
 
         this.outputText.add(text);
+    }
+
+    public void run(){
+        Boolean gameWon = false;
+        while (!gameWon){
+            gameWon = turn(deckArray);
+        }
     }
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Player implements Runnable {
-    //TODO run() method?????????????????????????
 
     private ArrayList<String> outputText = new ArrayList<>();
     private ArrayList<Card> hand;
@@ -67,7 +66,7 @@ public class Player implements Runnable {
 
                                 break;
                             }
-                        }
+                        } checkForWin(hand);
 
                     }
                 } catch (InterruptedException e) {}
@@ -89,18 +88,20 @@ public class Player implements Runnable {
 //        return allEqual;
 //    }
 
-    public synchronized void checkForWin(ArrayList<Card> hand) {
-        System.out.println(Thread.currentThread().getName() + " IN checkForWin");
+    public void checkForWin(ArrayList<Card> hand) {
+        synchronized (Player.class) {
+            System.out.println(Thread.currentThread().getName() + " IN checkForWin");
 
-        boolean allEqual = true;
-        for (Card c : hand) {
-            if(c.getValue() != hand.get(0).getValue()) {
-                allEqual = false;
-                break;
+            boolean allEqual = true;
+            for (Card c : hand) {
+                if (c.getValue() != hand.get(0).getValue()) {
+                    allEqual = false;
+                    break;
+                }
             }
-        }
-        if (allEqual) {
-            gameWon.set(true);
+            if (allEqual) {
+                gameWon.set(true);
+            }
         }
     }
 
@@ -191,8 +192,24 @@ public class Player implements Runnable {
         }
         System.out.println(Thread.currentThread().getName() + "-------------------------EXITS WHILE LOOP" + "   " + gameWon.get());
 
+        evenTurns();
 
-        //evenTurns();
+        System.out.println("--------hand--------" + Thread.currentThread().getName());
+            for (Card card: hand) {
+                System.out.println(card.getValue());
+            }
+
+
+        for (CardDeck deck1 :deckArray){
+            System.out.println("---------deck---------");
+            ArrayList<Card> cards2= deck1.getDeck();
+            for (Card card: cards2) {
+                System.out.println(card.getValue());
+            }
+        }
+
+
+        evenTurns();
 
 
     }

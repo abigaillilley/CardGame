@@ -58,12 +58,6 @@ public class Player implements Runnable {
 
                                 addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
 
-                                numTurns += 1;
-                                if (numTurns > highestNumTurns) {
-
-                                    highestNumTurns = numTurns;
-                                }
-
                                 break;
                             }
                         } checkForWin(hand);
@@ -99,6 +93,13 @@ public class Player implements Runnable {
                     break;
                 }
             }
+
+            numTurns += 1;
+            if (numTurns > highestNumTurns) {
+
+                highestNumTurns = numTurns;
+            }
+
             if (allEqual) {
                 gameWon.set(true);
             }
@@ -194,22 +195,24 @@ public class Player implements Runnable {
 
         evenTurns();
 
-        System.out.println("--------hand--------" + Thread.currentThread().getName());
-            for (Card card: hand) {
+        synchronized (Player.class) {
+            System.out.println("--------hand--------" + Thread.currentThread().getName());
+            for (Card card : hand) {
                 System.out.println(card.getValue());
             }
 
 
-        for (CardDeck deck1 :deckArray){
-            System.out.println("---------deck---------");
-            ArrayList<Card> cards2= deck1.getDeck();
-            for (Card card: cards2) {
-                System.out.println(card.getValue());
+            for (CardDeck deck1 : deckArray) {
+                System.out.println("---------deck---------");
+                ArrayList<Card> cards2 = deck1.getDeck();
+                for (Card card : cards2) {
+                    System.out.println(card.getValue());
+                }
             }
         }
 
-
-        evenTurns();
+        //4
+        //evenTurns();
 
 
     }

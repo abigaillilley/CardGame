@@ -3,7 +3,6 @@ import Cards.*;
 import Cards.CardDeck;
 import FileIO.Reader;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -191,8 +190,6 @@ public class cardGame {
         return deckArray;
 
     }
-
-
 
     /**
      * Displays a prompt and awaits next string user input.

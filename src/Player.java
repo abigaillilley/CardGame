@@ -1,6 +1,7 @@
 import Cards.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Player implements Runnable {
     //TODO run() method?????????????????????????
@@ -10,8 +11,9 @@ public class Player implements Runnable {
     private int playerNum;
     private final int totalNumPlayers;
     private int numTurns = 0;
-    public static volatile int highestNumTurns = 0;
-    public static volatile ArrayList<CardDeck> deckArray;
+    private static volatile int highestNumTurns = 0;
+    private static volatile ArrayList<CardDeck> deckArray;
+    private static AtomicBoolean gameWon = new AtomicBoolean(false);
 
     Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
         hand = inputHand;
@@ -20,55 +22,75 @@ public class Player implements Runnable {
         deckArray = inputCardDecks;
     }
 
-    public Boolean turn(ArrayList<CardDeck> deckArray) {
+    //public Boolean turn(ArrayList<CardDeck> deckArray) {
+    public void turn(ArrayList<CardDeck> deckArray) {
+        System.out.println(Thread.currentThread().getName() + " IN TURN");
             //returns true if a player has won on this turn{
         synchronized (Player.class) {
+            System.out.println(Thread.currentThread().getName() + " IN sync TURN");
+            checkForWin(hand);
+            //if (!checkForWin(hand)) {
+            if (!gameWon.get()) {
 
-            int pickUpDeckIndex = this.playerNum - 1;
-            CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
-            try {
-                Card topCard = pickUpDeck.pickUp();
-                if (topCard != null) {
-                    hand.add(topCard);
-                    addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " + getPlayerNum());
-                    int discardDeckIndex = playerNum % totalNumPlayers;
-                    CardDeck discardDeck = deckArray.get(discardDeckIndex);
+                int pickUpDeckIndex = this.playerNum - 1;
+                CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
+                try {
+                    Card topCard = pickUp(pickUpDeck);
+                    if (topCard != null) {
+                        hand.add(topCard);
+                        addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " + getPlayerNum());
+                        int discardDeckIndex = playerNum % totalNumPlayers;
+                        CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
-                    for (int i=0; i < totalNumPlayers; i++) {
+                        for (int i = 0; i < totalNumPlayers; i++) {
 
-                        if (playerNum != hand.get(i).getValue()) {
+                            if (playerNum != hand.get(i).getValue()) {
 
-                            discardDeck.putDown(hand.get(i));
-                            addToOutput("Player " + getPlayerNum() + " discards " + hand.get(i).getValue() + " to Deck " + (discardDeckIndex + 1));
-                            hand.remove(i);
+                                putDown(hand.get(i), discardDeck);
+                                addToOutput("Player " + getPlayerNum() + " discards " + hand.get(i).getValue() + " to Deck " + (discardDeckIndex + 1));
+                                hand.remove(i);
 
-                            ArrayList<String> cardValues = new ArrayList<>();
-                            for (Card card: hand) {
+                                ArrayList<String> cardValues = new ArrayList<>();
+                                for (Card card : hand) {
 
-                                cardValues.add(Integer.toString(card.getValue()));
+                                    cardValues.add(Integer.toString(card.getValue()));
 
+                                }
+
+                                addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
+
+                                numTurns += 1;
+                                if (numTurns > highestNumTurns) {
+
+                                    highestNumTurns = numTurns;
+                                }
+
+                                break;
                             }
-
-                            addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
-
-                            numTurns += 1;
-                            if (numTurns > highestNumTurns) {
-
-                                highestNumTurns = numTurns;
-                            }
-
-                            break;
                         }
+
                     }
+                } catch (InterruptedException e) {}
 
-                }
-            } catch(InterruptedException e) {}
-
-            return checkForWin(hand);
+                //return checkForWin(hand);
+            } //else { return checkForWin(hand); }
         }
     }
 
-    public static synchronized Boolean checkForWin(ArrayList<Card> hand) {
+//    public static synchronized Boolean checkForWin(ArrayList<Card> hand) {
+//
+//        boolean allEqual = true;
+//        for (Card c : hand) {
+//            if(c.getValue() != hand.get(0).getValue()) {
+//                allEqual = false;
+//                break;
+//            }
+//        }
+//        return allEqual;
+//    }
+
+    public synchronized void checkForWin(ArrayList<Card> hand) {
+        System.out.println(Thread.currentThread().getName() + " IN checkForWin");
 
         boolean allEqual = true;
         for (Card c : hand) {
@@ -77,7 +99,9 @@ public class Player implements Runnable {
                 break;
             }
         }
-        return allEqual;
+        if (allEqual) {
+            gameWon.set(true);
+        }
     }
 
     public void evenTurns() {
@@ -86,16 +110,49 @@ public class Player implements Runnable {
             int pickUpDeckIndex = this.playerNum - 1;
             CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
             try {
-                Card transferCard = pickUpDeck.pickUp();
+                Card transferCard = pickUp(pickUpDeck);
                 if (transferCard != null) {
                     int discardDeckIndex = playerNum % totalNumPlayers;
                     CardDeck discardDeck = deckArray.get(discardDeckIndex);
-                    discardDeck.putDown(transferCard);
+                    putDown(transferCard, discardDeck);
 
                     numTurns += 1;
                 }
             } catch (InterruptedException e ) {}
         }
+    }
+
+    public Card pickUp(CardDeck cardDeck) throws InterruptedException {
+
+        ArrayList<Card> deck = cardDeck.getDeck();
+
+        synchronized (Player.class) {
+            try {
+                while (deck.size() == 0) {
+                    Thread.sleep(100);
+                }
+
+                //if (deck.size() != 0) {
+                    Card topCard = deck.get(0);
+                    System.out.println(Thread.currentThread().getName() + " picked up card " + topCard.getValue());
+                    deck.remove(0);
+                    return topCard;
+                //} else {
+                   // System.out.println("no cards in deck"); }
+                    //return null;
+            } catch (InterruptedException e) {
+                return null;
+            }
+        }
+    }
+
+    public void putDown(Card discardCard, CardDeck discardDeck) {
+
+        ArrayList<Card> deck = discardDeck.getDeck();
+        deck.add(discardCard);
+        discardDeck.setDeck(deck);
+
+        System.out.println(Thread.currentThread().getName() + " discarded card " + discardCard.getValue());
     }
 
 
@@ -119,12 +176,23 @@ public class Player implements Runnable {
     }
 
     public void run(){
-        Boolean gameWon = false;
-        while (!gameWon){
-            gameWon = turn(deckArray);
-        }
+        while (!gameWon.get()){
+            //System.out.println(Thread.currentThread().getName() + "   " + gameWon.get());
+            int pickUpDeckIndex = this.playerNum - 1;
+            CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
 
-        evenTurns();
+            //System.out.println(Thread.currentThread().getName() + " game won???????" + gameWon);
+            if (pickUpDeck.getDeck().size() != 0) {
+                //gameWon.set(turn(deckArray));
+                turn(deckArray);
+            } else {
+                System.out.println(Thread.currentThread().getName() +"      empty deck");
+            }
+        }
+        System.out.println(Thread.currentThread().getName() + "-------------------------EXITS WHILE LOOP" + "   " + gameWon.get());
+
+
+        //evenTurns();
 
 
     }

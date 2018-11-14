@@ -52,21 +52,21 @@ public class cardGame {
                         //System.out.println(player.getOutputText());
                     }
 
-//                    for (Player player :playerArray){
-//                        System.out.println("--------hand--------");
-//                        ArrayList<Card> hand = player.getHand();
-//                        for (Card card: hand) {
-//                            System.out.println(card.getValue());
-//                        }
-//                    }
-//
-//                    for (CardDeck deck1 :deckArray){
-//                        System.out.println("---------deck---------");
-//                        ArrayList<Card> cards2= deck1.getDeck();
-//                        for (Card card: cards2) {
-//                            System.out.println(card.getValue());
-//                        }
-//                    }
+                    for (Player player :playerArray){
+                        System.out.println("--------hand--------");
+                        ArrayList<Card> hand = player.getHand();
+                        for (Card card: hand) {
+                            System.out.println(card.getValue());
+                        }
+                    }
+
+                    for (CardDeck deck1 :deckArray){
+                        System.out.println("---------deck---------");
+                        ArrayList<Card> cards2= deck1.getDeck();
+                        for (Card card: cards2) {
+                            System.out.println(card.getValue());
+                        }
+                    }
 
                 } else {
 

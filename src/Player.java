@@ -9,7 +9,8 @@ public class Player implements Runnable {
     private ArrayList<Card> hand;
     private int playerNum;
     private final int totalNumPlayers;
-    private int turnCounter = 0;
+    private int numTurns = 0;
+    public static volatile int highestNumTurns = 0;
     public static volatile ArrayList<CardDeck> deckArray;
 
     Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
@@ -29,8 +30,8 @@ public class Player implements Runnable {
                 Card topCard = pickUpDeck.pickUp();
                 if (topCard != null) {
                     hand.add(topCard);
-                    this.addToOutput("Player " + this.getPlayerNum() + " draws " + topCard.getValue() + " from Deck " + this.getPlayerNum());
-                    int discardDeckIndex = this.playerNum % this.totalNumPlayers;
+                    addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " + getPlayerNum());
+                    int discardDeckIndex = playerNum % totalNumPlayers;
                     CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
                     for (int i=0; i < totalNumPlayers; i++) {
@@ -38,18 +39,23 @@ public class Player implements Runnable {
                         if (playerNum != hand.get(i).getValue()) {
 
                             discardDeck.putDown(hand.get(i));
-
-                            this.addToOutput("Player " + this.getPlayerNum() + " discards " + hand.get(i).getValue() + " to Deck " + (discardDeckIndex + 1));
-
+                            addToOutput("Player " + getPlayerNum() + " discards " + hand.get(i).getValue() + " to Deck " + (discardDeckIndex + 1));
                             hand.remove(i);
 
                             ArrayList<String> cardValues = new ArrayList<>();
                             for (Card card: hand) {
-                                cardValues.add(Integer.toString(card.getValue()));
-                            }
-                            this.addToOutput("Player " + this.getPlayerNum() + " current hand: " + cardValues);
 
-                            this.turnCounter += 1;
+                                cardValues.add(Integer.toString(card.getValue()));
+
+                            }
+
+                            addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
+
+                            numTurns += 1;
+                            if (numTurns > highestNumTurns) {
+
+                                highestNumTurns = numTurns;
+                            }
 
                             break;
                         }
@@ -74,9 +80,22 @@ public class Player implements Runnable {
         return allEqual;
     }
 
-    public static void evenTurns(ArrayList<Player> playerArrayList) {
+    public void evenTurns() {
     //while your tuns is less than highestTurns, then pickup and put down card
+        while (numTurns < highestNumTurns) {
+            int pickUpDeckIndex = this.playerNum - 1;
+            CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
+            try {
+                Card transferCard = pickUpDeck.pickUp();
+                if (transferCard != null) {
+                    int discardDeckIndex = playerNum % totalNumPlayers;
+                    CardDeck discardDeck = deckArray.get(discardDeckIndex);
+                    discardDeck.putDown(transferCard);
 
+                    numTurns += 1;
+                }
+            } catch (InterruptedException e ) {}
+        }
     }
 
 
@@ -104,5 +123,9 @@ public class Player implements Runnable {
         while (!gameWon){
             gameWon = turn(deckArray);
         }
+
+        evenTurns();
+
+
     }
 }

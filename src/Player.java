@@ -19,43 +19,44 @@ public class Player implements Runnable {
         deckArray = inputCardDecks;
     }
 
-
-    public Boolean turn(ArrayList<CardDeck> deckArray)
-            //returns true if a player has won on this turn
-    {
+    public Boolean turn(ArrayList<CardDeck> deckArray) {
+            //returns true if a player has won on this turn{
         synchronized (Player.class) {
 
             int pickUpDeckIndex = this.playerNum - 1;
             CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
-            Card topCard = pickUpDeck.pickUp();
-            hand.add(topCard);
+            try {
+                Card topCard = pickUpDeck.pickUp();
+                if (topCard != null) {
+                    hand.add(topCard);
+                    this.addToOutput("Player " + this.getPlayerNum() + " draws " + topCard.getValue() + " from Deck " + this.getPlayerNum());
+                    int discardDeckIndex = this.playerNum % this.totalNumPlayers;
+                    CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
-            this.addToOutput("Player " + this.getPlayerNum() + " draws " + topCard.getValue() + " from Deck " + this.getPlayerNum());
+                    for (int i=0; i < totalNumPlayers; i++) {
 
-            int discardDeckIndex = this.playerNum % this.totalNumPlayers;
-            CardDeck discardDeck = deckArray.get(discardDeckIndex);
+                        if (playerNum != hand.get(i).getValue()) {
 
-            for (int i=0; i < totalNumPlayers; i++) {
+                            discardDeck.putDown(hand.get(i));
 
-                if (playerNum != hand.get(i).getValue()) {
+                            this.addToOutput("Player " + this.getPlayerNum() + " discards " + hand.get(i).getValue() + " to Deck " + (discardDeckIndex + 1));
 
-                    discardDeck.putDown(hand.get(i));
+                            hand.remove(i);
 
-                    this.addToOutput("Player " + this.getPlayerNum() + " discards " + hand.get(i).getValue() + " to Deck " + (discardDeckIndex + 1));
+                            ArrayList<String> cardValues = new ArrayList<>();
+                            for (Card card: hand) {
+                                cardValues.add(Integer.toString(card.getValue()));
+                            }
+                            this.addToOutput("Player " + this.getPlayerNum() + " current hand: " + cardValues);
 
-                    hand.remove(i);
+                            this.turnCounter += 1;
 
-                    ArrayList<String> cardValues = new ArrayList<>();
-                    for (Card card: hand) {
-                        cardValues.add(Integer.toString(card.getValue()));
+                            break;
+                        }
                     }
-                    this.addToOutput("Player " + this.getPlayerNum() + " current hand: " + cardValues);
 
-                    this.turnCounter += 1;
-
-                    break;
                 }
-            }
+            } catch(InterruptedException e) {}
 
             return checkForWin(hand);
         }

@@ -63,12 +63,25 @@ public class cardGame {
 
 
                     try {
+
+
+                        //File file = new File(path)
+
+                        String userDir = System.getProperty("user.dir");
+                        //Path outputDirPath = Paths.get(userDir, "outputFiles");
+                        File outputFiles = new File("outputFiles");
+
+                        for(File file: outputFiles.listFiles()) { //this is fine, tested when folder was empty and still works soooo
+                            if (!file.isDirectory())
+                                file.delete();                  //this is fine
+                        }
+
                         for (Player player: playerArray) {
 
                             String playerFilename = "outputFiles/player" + player.getPlayerNum() + "_output.txt";
 
                             Path playerPath;
-                            String userDir = System.getProperty("user.dir");
+                            //String userDir = System.getProperty("user.dir");
                             playerPath = Paths.get(userDir, playerFilename);
 
                             Writer playerWriter = new Writer(playerPath);
@@ -81,7 +94,7 @@ public class cardGame {
                             String deckFilename = "outputFiles/deck" + deck.getDeckNum() + "_output.txt";
 
                             Path deckPath;
-                            String userDir = System.getProperty("user.dir");
+                            //String userDir = System.getProperty("user.dir");
                             deckPath = Paths.get(userDir, deckFilename);
 
                             ArrayList<Integer> cardNumbers = new ArrayList<>();

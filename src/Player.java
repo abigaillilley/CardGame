@@ -41,7 +41,7 @@ public class Player implements Runnable {
                         int discardDeckIndex = playerNum % totalNumPlayers;
                         CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
-                        for (int i = 0; i < totalNumPlayers; i++) {
+                        for (int i = 0; i < 4; i++) {
 
                             if (playerNum != hand.get(i).getValue()) {
 

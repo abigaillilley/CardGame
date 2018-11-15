@@ -15,6 +15,7 @@ public class Player implements Runnable {
     private static volatile int highestNumTurns = 0;
     private static volatile ArrayList<CardDeck> deckArray;
     private static AtomicBoolean gameWon = new AtomicBoolean(false);
+    private static String winner;
 
     Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
 
@@ -31,91 +32,90 @@ public class Player implements Runnable {
         //testing
         System.out.println(Thread.currentThread().getName() + " IN TURN");
 
-        synchronized (Player.class) {
+        //testing
+        //System.out.println(Thread.currentThread().getName() + " IN sync TURN");
 
-            //testing
-            System.out.println(Thread.currentThread().getName() + " IN sync TURN");
+        //checkForWin(hand);
 
-            checkForWin(hand);
+        if (!gameWon.get()) {
 
-            if (!gameWon.get()) {
+            int pickUpDeckIndex = this.playerNum - 1;
+            CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
 
-                int pickUpDeckIndex = this.playerNum - 1;
-                CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
+            Card topCard = pickUp(pickUpDeck);
 
-                Card topCard = pickUp(pickUpDeck);
+            if (topCard != null) {
 
-                if (topCard != null) {
+                hand.add(topCard);
+                addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " +
+                        getPlayerNum());
 
-                    hand.add(topCard);
-                    addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " +
-                            getPlayerNum());
+                int discardDeckIndex = playerNum % totalNumPlayers;
+                CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
-                    int discardDeckIndex = playerNum % totalNumPlayers;
-                    CardDeck discardDeck = deckArray.get(discardDeckIndex);
+                for (int i = 0; i < 4; i++) {
 
-                    for (int i = 0; i < 4; i++) {
+                    if (playerNum != hand.get(i).getValue()) {
 
-                        if (playerNum != hand.get(i).getValue()) {
+                        putDown(hand.get(i), discardDeck);
+                        addToOutput("Player " + getPlayerNum() + " discards " + hand.get(i).getValue() +
+                                " to Deck " + (discardDeckIndex + 1));
+                        hand.remove(i);
 
-                            putDown(hand.get(i), discardDeck);
-                            addToOutput("Player " + getPlayerNum() + " discards " + hand.get(i).getValue() +
-                                    " to Deck " + (discardDeckIndex + 1));
-                            hand.remove(i);
-
-                            //testing
-                            ArrayList<String> cardValues = new ArrayList<>();
-                            for (Card card : hand) {
-                                cardValues.add(Integer.toString(card.getValue()));
-                            }
-                            addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
-
-                            break;
+                        //testing
+                        ArrayList<String> cardValues = new ArrayList<>();
+                        for (Card card : hand) {
+                            cardValues.add(Integer.toString(card.getValue()));
                         }
-                    } checkForWin(hand);
+                        addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
 
-                    numTurns += 1;
-                    if (numTurns > highestNumTurns) { highestNumTurns = numTurns; }
-
-                    //testing
-                    System.out.println( "----regular turns-----------------------" + Thread.currentThread().getName() + " Num turns " + numTurns + " highest " +highestNumTurns);
-
-
-                    //testing : view player's hand after each turn
-                    ArrayList<String> cardValues = new ArrayList<>();
-                    for (Card card : hand) {
-                        cardValues.add(Integer.toString(card.getValue()));
+                        break;
                     }
-                    System.out.println("Player " + getPlayerNum() + " current hand: " + cardValues);
-
                 }
+                checkForWin(hand);
+
+                numTurns += 1;
+                if (numTurns > highestNumTurns) { highestNumTurns = numTurns; }
+
+                //testing
+                System.out.println( "----regular turns-----------------------" + Thread.currentThread().getName() + " Num turns " + numTurns + " highest " +highestNumTurns);
+
+
+                //testing : view player's hand after each turn
+                ArrayList<String> cardValues = new ArrayList<>();
+                for (Card card : hand) {
+                    cardValues.add(Integer.toString(card.getValue()));
+                }
+                System.out.println("Player " + getPlayerNum() + " current hand: " + cardValues);
+
             }
         }
+
     }
 
 
-    private void checkForWin(ArrayList<Card> hand) {
+    private static synchronized void checkForWin(ArrayList<Card> hand) {
 
-        synchronized (Player.class) {
+        //testing
+        System.out.println(Thread.currentThread().getName() + " IN checkForWin");
 
-            //testing
-            System.out.println(Thread.currentThread().getName() + " IN checkForWin");
+        boolean allEqual = true;
 
-            boolean allEqual = true;
+        for (Card c : hand) {
 
-            for (Card c : hand) {
+            if (c.getValue() != hand.get(0).getValue()) {
 
-                if (c.getValue() != hand.get(0).getValue()) {
-
-                    allEqual = false;
-                    break;
-                }
-            }
-
-            if (allEqual) {
-                gameWon.set(true);
+                allEqual = false;
+                break;
             }
         }
+
+        if (allEqual) {
+            gameWon.set(true);
+            winner = Thread.currentThread().getName();
+        }
+        System.out.println(Thread.currentThread().getName() + " EXITING checkForWin");
+
     }
 
 
@@ -143,26 +143,21 @@ public class Player implements Runnable {
 
     private Card pickUp(CardDeck cardDeck){
 
+        //testing
+        System.out.println(Thread.currentThread().getName() + " entered pickUP");
+
         ArrayList<Card> deck = cardDeck.getDeck();
 
-        synchronized (Player.class) { //TODO does this actually need to be synchronised????
-            try {
-                while (deck.size() == 0) { //TODO restructure this, empty deck is handled in run()
-                    Thread.sleep(100);
-                }
+            Card topCard = deck.get(0);
 
-                Card topCard = deck.get(0);
+            //testing
+            System.out.println(Thread.currentThread().getName() + " picked up card " + topCard.getValue());
 
-                //testing
-                System.out.println(Thread.currentThread().getName() + " picked up card " + topCard.getValue());
+            deck.remove(0);
 
-                deck.remove(0);
-                return topCard;
+        System.out.println(Thread.currentThread().getName() + " exited pickUP");
 
-            } catch (InterruptedException e) { //TODO don't need this if thread not sleeping, but if it is what do we put here?? (3)
-                return null;
-            }
-        }
+        return topCard;
     }
 
 
@@ -174,12 +169,12 @@ public class Player implements Runnable {
 
 
         //testing
-        System.out.println(Thread.currentThread().getName() + " discarded card " + discardCard.getValue());
-        ArrayList<Integer> test = new ArrayList<>();
-        for (Card card: deck) {
-            test.add(card.getValue());
-        }
-        System.out.println(test);
+//        System.out.println(Thread.currentThread().getName() + " discarded card " + discardCard.getValue());
+//        ArrayList<Integer> test = new ArrayList<>();
+//        for (Card card: deck) {
+//            test.add(card.getValue());
+//        }
+//        System.out.println(test);
 
     }
 
@@ -206,33 +201,35 @@ public class Player implements Runnable {
 
     public void run(){
 
+        Thread.currentThread().setName("Player " + playerNum);
+
         int pickUpDeckIndex = this.playerNum - 1;
         CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
 
-        while (!gameWon.get()){
-
-            if (pickUpDeck.getDeck().size() != 0) {
-
-                turn(deckArray);
-
-            } else {
-
-                //testing
-                System.out.println(Thread.currentThread().getName() +"      empty deck");
-                //TODO make thread sleep here rather than in pickup???
-            }
-
-
-//            //testing decks are working properly
-//            ArrayList<Integer> test = new ArrayList<>();
-//            for (CardDeck deck : deckArray) {
-//                for (Card card : deck.getDeck()) {
-//                    test.add(card.getValue());
-//                }
-//                System.out.println(test);
-            //}
-
+        synchronized (Player.class) {
+            checkForWin(hand);
         }
+
+        try {
+            while (!gameWon.get()) {
+
+                if (pickUpDeck.getDeck().size() != 0) {
+
+                    turn(deckArray);
+
+                } else {
+                    Thread.sleep(100);
+
+                    //testing
+                    System.out.println(Thread.currentThread().getName() + "      empty deck");
+                    //TODO make thread sleep here rather than in pickup???
+                }
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted!");
+        }
+
+        //testing
         System.out.println(Thread.currentThread().getName() + "-------------------------EXITS WHILE LOOP" + "   " + gameWon.get());
 
         while (numTurns < highestNumTurns) {
@@ -240,6 +237,26 @@ public class Player implements Runnable {
                 evenTurns();
             }
         }
+
+        String myName = Thread.currentThread().getName();
+
+        if (myName == winner) {
+            outputText.add(myName + " wins");
+        } else {
+            outputText.add(winner + " has informed " + myName + " that " + winner + " has won");
+        }
+
+        ArrayList<Integer> finalHand = new ArrayList<>();
+        for (Card card: hand) {
+            finalHand.add(card.getValue());
+        }
+
+        outputText.add(myName + " exits");
+        outputText.add(myName + " final hand: " + finalHand);
+
+
+        //testing
+        System.out.println(outputText);
 
 
         //testing -- literally this whole synchronised block

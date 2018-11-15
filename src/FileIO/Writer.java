@@ -4,23 +4,26 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class Writer {
 
-        private final BufferedWriter writer;
+    private final BufferedWriter writer;
 
-        Writer(Path path) throws IOException{
-            writer = Files.newBufferedWriter(path);
-        }
+    public Writer(Path path) throws IOException{
+        writer = Files.newBufferedWriter(path);
+    }
 
-        void add (String[] data) throws IOException{
-            writer.write(String.join(",", data));
+    public void add (ArrayList<String> data) throws IOException{
+        for (String line : data) {
+            writer.write(line);
             writer.newLine();
         }
+    }
 
-        void close() throws IOException{
-            writer.close();
-        }
+    public void close() throws IOException{
+        writer.close();
+    }
 
 
 

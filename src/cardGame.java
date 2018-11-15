@@ -1,11 +1,13 @@
 import Cards.*;
 import FileIO.Reader;
+import FileIO.Writer;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.File;
 import java.io.IOException;
 
 
@@ -42,28 +44,68 @@ public class cardGame {
                     ArrayList<CardDeck> deckArray = distributeDeckCards(packHolder, totalNumPlayers);
                     ArrayList<Player> playerArray = distributePlayerCards(packHolder, totalNumPlayers, deckArray);
 
+                    ArrayList<Thread> threadArray = new ArrayList<>();
+
                     for (Player player: playerArray) {
                         Thread playerThread = new Thread(player);
                         playerThread.start();
+                        threadArray.add(playerThread);
+                    }
+
+                    try {
+                        for (Thread thread : threadArray) {
+                            thread.join();
+                        }
+                    } catch (InterruptedException e){
+
+                        e.printStackTrace(); //TODO do we want to do this here???
                     }
 
 
-                    //testing - outputs initial hands
-                    for (Player player :playerArray){
-                        System.out.println("--------hand--------");
-                        ArrayList<Card> hand = player.getHand();
-                        for (Card card: hand) {
-                            System.out.println(card.getValue());
+                    try {
+                        for (Player player: playerArray) {
+
+                            //testing
+                            //System.out.println(player.getOutputText());
+
+                            String playerFilename = "outputFiles/player" + player.getPlayerNum() + "_output.txt";
+                            File playerFile = new File( playerFilename);
+                            playerFile.createNewFile();
+
+
+                            Path playerPath;
+                            String userDir = System.getProperty("user.dir");
+                            playerPath = Paths.get(userDir, playerFilename);
+
+                            //testing
+                            System.out.println(playerPath);
+
+
+                            //Path playerPath = Paths.get(userDir, "/..", membersFilename);
+
+                            Writer playerWriter = new Writer(playerPath);
+                            playerWriter.add(player.getOutputText());
+                            playerWriter.close();
                         }
-                    }
-                    //testing - outputs initial decks
-                    for (CardDeck deck1 :deckArray){
-                        System.out.println("---------deck---------");
-                        ArrayList<Card> cards2= deck1.getDeck();
-                        for (Card card: cards2) {
-                            System.out.println(card.getValue());
-                        }
-                    }
+                    } catch (IOException i) { i.printStackTrace();}
+
+
+//                    //testing - outputs initial hands
+//                    for (Player player :playerArray){
+//                        System.out.println("--------hand--------");
+//                        ArrayList<Card> hand = player.getHand();
+//                        for (Card card: hand) {
+//                            System.out.println(card.getValue());
+//                        }
+//                    }
+//                    //testing - outputs initial decks
+//                    for (CardDeck deck1 :deckArray){
+//                        System.out.println("---------deck---------");
+//                        ArrayList<Card> cards2= deck1.getDeck();
+//                        for (Card card: cards2) {
+//                            System.out.println(card.getValue());
+//                        }
+//                    }
 
                 } else {
 
@@ -90,7 +132,6 @@ public class cardGame {
             Path fullPath;
             String userDir = System.getProperty("user.dir");
             fullPath = Paths.get(userDir, fileIn);
-            System.out.println(fullPath);
 
             try {
                 Boolean validPack = true;

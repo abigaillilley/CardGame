@@ -65,26 +65,35 @@ public class cardGame {
                     try {
                         for (Player player: playerArray) {
 
-                            //testing
-                            //System.out.println(player.getOutputText());
-
                             String playerFilename = "outputFiles/player" + player.getPlayerNum() + "_output.txt";
-                            File playerFile = new File( playerFilename);
-                            playerFile.createNewFile();
-
 
                             Path playerPath;
                             String userDir = System.getProperty("user.dir");
                             playerPath = Paths.get(userDir, playerFilename);
 
-                            //testing
-                            System.out.println(playerPath);
-
-
-                            //Path playerPath = Paths.get(userDir, "/..", membersFilename);
-
                             Writer playerWriter = new Writer(playerPath);
                             playerWriter.add(player.getOutputText());
+                            playerWriter.close();
+                        }
+
+                        for (CardDeck deck: deckArray) {
+
+                            String deckFilename = "outputFiles/deck" + deck.getDeckNum() + "_output.txt";
+
+                            Path deckPath;
+                            String userDir = System.getProperty("user.dir");
+                            deckPath = Paths.get(userDir, deckFilename);
+
+                            ArrayList<Integer> cardNumbers = new ArrayList<>();
+                            for (Card card: deck.getDeck()) {
+                                cardNumbers.add(card.getValue());
+                            }
+
+                            ArrayList<String> deckOutput = new ArrayList<>();
+                            deckOutput.add("Deck " + deck.getDeckNum() + " contents: " + cardNumbers);
+
+                            Writer playerWriter = new Writer(deckPath);
+                            playerWriter.add(deckOutput);
                             playerWriter.close();
                         }
                     } catch (IOException i) { i.printStackTrace();}
@@ -225,7 +234,7 @@ public class cardGame {
                 deck.add(nextCard);
             }
 
-            deckArray.add(new CardDeck(deck));
+            deckArray.add(new CardDeck(deck, i + 1));
         }
 
         return deckArray;

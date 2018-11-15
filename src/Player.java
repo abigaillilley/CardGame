@@ -240,8 +240,19 @@ public class Player implements Runnable {
 
         String myName = Thread.currentThread().getName();
 
-        if (myName == winner) {
+        if (myName.equals(winner)) {
+
             outputText.add(myName + " wins");
+
+            System.out.println("**************************************************");
+            System.out.println("**************************************************");
+            System.out.println("***              Player " + playerNum + " has won              ***");
+            System.out.println("**************************************************");
+            System.out.println("**************************************************");
+            System.out.println("***                  Game Over                 ***");
+            System.out.println("**************************************************");
+            System.out.println("**************************************************");
+
         } else {
             outputText.add(winner + " has informed " + myName + " that " + winner + " has won");
         }
@@ -256,25 +267,25 @@ public class Player implements Runnable {
 
 
         //testing
-        System.out.println(outputText);
+        //System.out.println(outputText);
 
 
-        //testing -- literally this whole synchronised block
-        synchronized (Player.class) {
-
-            System.out.println("--------hand--------" + Thread.currentThread().getName());
-            for (Card card : hand) {
-                System.out.println(card.getValue());
-            }
-
-
-            for (CardDeck deck1 : deckArray) {
-                System.out.println("---------deck---------" + Thread.currentThread().getName());
-                ArrayList<Card> cards2 = deck1.getDeck();
-                for (Card card : cards2) {
-                    System.out.println(card.getValue());
-                }
-            }
-        }
+//        //testing -- literally this whole synchronised block
+//        synchronized (Player.class) {
+//
+//            System.out.println("--------hand--------" + Thread.currentThread().getName());
+//            for (Card card : hand) {
+//                System.out.println(card.getValue());
+//            }
+//
+//
+//            for (CardDeck deck1 : deckArray) {
+//                System.out.println("---------deck---------" + Thread.currentThread().getName());
+//                ArrayList<Card> cards2 = deck1.getDeck();
+//                for (Card card : cards2) {
+//                    System.out.println(card.getValue());
+//                }
+//            }
+//        }
     }
 }

@@ -62,6 +62,24 @@ public class Player implements Runnable {
                             }
                         } checkForWin(hand);
 
+
+                        numTurns += 1;
+                        if (numTurns > highestNumTurns) {
+
+                            highestNumTurns = numTurns;
+                        }
+                        System.out.println( "----regular turns-----------------------" + Thread.currentThread().getName() + " Num turns " + numTurns + " highest " +highestNumTurns);
+
+
+
+
+                        //test to view play'er hand after eac turn
+                        ArrayList<String> cardValues = new ArrayList<>();
+                        for (Card card : hand) {
+                            cardValues.add(Integer.toString(card.getValue()));
+                        }
+                        System.out.println("Player " + getPlayerNum() + " current hand: " + cardValues);
+
                     }
                 } catch (InterruptedException e) {}
 
@@ -94,11 +112,13 @@ public class Player implements Runnable {
                 }
             }
 
-            numTurns += 1;
-            if (numTurns > highestNumTurns) {
+//            numTurns += 1;
+//            if (numTurns > highestNumTurns) {
+//
+//                highestNumTurns = numTurns;
+//            }
+//            System.out.println( "----regular turns-----------------------" + Thread.currentThread().getName() + " Num turns " + numTurns + " highest " +highestNumTurns);
 
-                highestNumTurns = numTurns;
-            }
 
             if (allEqual) {
                 gameWon.set(true);
@@ -108,7 +128,7 @@ public class Player implements Runnable {
 
     public void evenTurns() {
     //while your tuns is less than highestTurns, then pickup and put down card
-        while (numTurns < highestNumTurns) {
+        //while (numTurns < highestNumTurns) {
             int pickUpDeckIndex = this.playerNum - 1;
             CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
             try {
@@ -119,9 +139,11 @@ public class Player implements Runnable {
                     putDown(transferCard, discardDeck);
 
                     numTurns += 1;
+                    System.out.println( "--even turns-------------------------" + Thread.currentThread().getName() + " Num turns " + numTurns + " highest " +highestNumTurns);
+
                 }
             } catch (InterruptedException e ) {}
-        }
+        //}
     }
 
     public Card pickUp(CardDeck cardDeck) throws InterruptedException {
@@ -154,8 +176,18 @@ public class Player implements Runnable {
         deck.add(discardCard);
         discardDeck.setDeck(deck);
 
+
+
         System.out.println(Thread.currentThread().getName() + " discarded card " + discardCard.getValue());
+        ArrayList<Integer> test = new ArrayList<>();
+        for (Card card: deck) {
+            test.add(card.getValue());
+        }
+        System.out.println(test);
+
     }
+
+
 
 
     public ArrayList<Card> getHand() {
@@ -178,10 +210,14 @@ public class Player implements Runnable {
     }
 
     public void run(){
+
+        int pickUpDeckIndex = this.playerNum - 1;
+        CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
+
         while (!gameWon.get()){
             //System.out.println(Thread.currentThread().getName() + "   " + gameWon.get());
-            int pickUpDeckIndex = this.playerNum - 1;
-            CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
+            //int pickUpDeckIndex = this.playerNum - 1;
+            //CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
 
             //System.out.println(Thread.currentThread().getName() + " game won???????" + gameWon);
             if (pickUpDeck.getDeck().size() != 0) {
@@ -190,12 +226,32 @@ public class Player implements Runnable {
             } else {
                 System.out.println(Thread.currentThread().getName() +"      empty deck");
             }
+
+
+//            //test decks are working properly
+//            ArrayList<Integer> test = new ArrayList<>();
+//            for (CardDeck deck : deckArray) {
+//                for (Card card : deck.getDeck()) {
+//                    test.add(card.getValue());
+//                }
+//                System.out.println(test);
+            //}
+
         }
         System.out.println(Thread.currentThread().getName() + "-------------------------EXITS WHILE LOOP" + "   " + gameWon.get());
 
-        evenTurns();
+        while (numTurns < highestNumTurns) {
+            if (pickUpDeck.getDeck().size() != 0) {
+                evenTurns();
+            }
+        }
+
+
 
         synchronized (Player.class) {
+
+            //evenTurns();
+
             System.out.println("--------hand--------" + Thread.currentThread().getName());
             for (Card card : hand) {
                 System.out.println(card.getValue());

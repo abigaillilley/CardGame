@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 public class CardDeck {
 
+
     private volatile ArrayList<Card> deck;
 
-    public CardDeck(ArrayList<Card> cards){
 
+    public CardDeck(ArrayList<Card> cards){
         this.deck = cards;
     }
 

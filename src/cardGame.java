@@ -1,6 +1,4 @@
 import Cards.*;
-
-import Cards.CardDeck;
 import FileIO.Reader;
 
 import java.util.ArrayList;
@@ -47,10 +45,10 @@ public class cardGame {
                     for (Player player: playerArray) {
                         Thread playerThread = new Thread(player);
                         playerThread.start();
-                        //player.turn(deckArray);
-                        //System.out.println(player.getOutputText());
                     }
 
+
+                    //testing - outputs initial hands
                     for (Player player :playerArray){
                         System.out.println("--------hand--------");
                         ArrayList<Card> hand = player.getHand();
@@ -58,7 +56,7 @@ public class cardGame {
                             System.out.println(card.getValue());
                         }
                     }
-
+                    //testing - outputs initial decks
                     for (CardDeck deck1 :deckArray){
                         System.out.println("---------deck---------");
                         ArrayList<Card> cards2= deck1.getDeck();
@@ -78,6 +76,7 @@ public class cardGame {
             }
         }
     }
+
 
     private static ArrayList<Integer> getPack(int numPlayers) {
 
@@ -140,6 +139,7 @@ public class cardGame {
         return packHolder;
     }
 
+
     private static ArrayList<Player> distributePlayerCards(ArrayList<Integer> pack, int totalNumPlayers, ArrayList<CardDeck> deckArray) {
 
         ArrayList<Player> playerArray = new ArrayList<>();
@@ -166,8 +166,8 @@ public class cardGame {
         }
 
         return playerArray;
-
     }
+
 
     private static ArrayList<CardDeck> distributeDeckCards(ArrayList<Integer> pack, int totalNumPlayers) {
 
@@ -188,8 +188,8 @@ public class cardGame {
         }
 
         return deckArray;
-
     }
+
 
     /**
      * Displays a prompt and awaits next string user input.

@@ -8,18 +8,19 @@ import java.nio.file.Path;
 public class Reader{
 
     private final BufferedReader reader;
-    private String line;
-    private String[] info;
+    //private String line;
+    //private String[] info;
 
     public Reader(Path filePath) throws IOException{
         reader = Files.newBufferedReader(filePath);
     }
 
     public String[] next() throws IOException{
-        line = reader.readLine();
+
+        String line = reader.readLine();
         if (line != null){
-            info = line.split(" ");
-            return info;
+            return line.split(" ");
+            //return info;
         }
         return null;
     }

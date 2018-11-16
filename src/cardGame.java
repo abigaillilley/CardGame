@@ -64,11 +64,7 @@ public class cardGame {
 
                     try {
 
-
-                        //File file = new File(path)
-
                         String userDir = System.getProperty("user.dir");
-                        //Path outputDirPath = Paths.get(userDir, "outputFiles");
                         File outputFiles = new File("outputFiles");
 
                         for(File file: outputFiles.listFiles()) { //this is fine, tested when folder was empty and still works soooo
@@ -81,7 +77,6 @@ public class cardGame {
                             String playerFilename = "outputFiles/player" + player.getPlayerNum() + "_output.txt";
 
                             Path playerPath;
-                            //String userDir = System.getProperty("user.dir");
                             playerPath = Paths.get(userDir, playerFilename);
 
                             Writer playerWriter = new Writer(playerPath);
@@ -94,7 +89,6 @@ public class cardGame {
                             String deckFilename = "outputFiles/deck" + deck.getDeckNum() + "_output.txt";
 
                             Path deckPath;
-                            //String userDir = System.getProperty("user.dir");
                             deckPath = Paths.get(userDir, deckFilename);
 
                             ArrayList<Integer> cardNumbers = new ArrayList<>();
@@ -110,25 +104,6 @@ public class cardGame {
                             playerWriter.close();
                         }
                     } catch (IOException i) { i.printStackTrace();}
-
-
-//                    //testing - outputs initial hands
-//                    for (Player player :playerArray){
-//                        System.out.println("--------hand--------");
-//                        ArrayList<Card> hand = player.getHand();
-//                        for (Card card: hand) {
-//                            System.out.println(card.getValue());
-//                        }
-//                    }
-//                    //testing - outputs initial decks
-//                    for (CardDeck deck1 :deckArray){
-//                        System.out.println("---------deck---------");
-//                        ArrayList<Card> cards2= deck1.getDeck();
-//                        for (Card card: cards2) {
-//                            System.out.println(card.getValue());
-//                        }
-//                    }
-
                 } else {
 
                     System.out.println("*** Invalid number of players (must be an integer greater than or equal to 2)");
@@ -267,5 +242,3 @@ public class cardGame {
         return inputScanner.nextLine();
     }
 }
-
-

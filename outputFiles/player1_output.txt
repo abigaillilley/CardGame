@@ -1,0 +1,4 @@
+Player 1 initial hand: [2, 1, 1, 1]
+Player 2 has informed Player 1 that Player 2 has won
+Player 1 exits
+Player 1 final hand: [2, 1, 1, 1]

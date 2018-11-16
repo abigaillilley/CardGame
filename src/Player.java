@@ -87,7 +87,7 @@ public class Player implements Runnable {
             }
         }
 
-        if (allEqual) {
+        if (allEqual && !gameWon.get()) {
             gameWon.set(true);
             winner = Thread.currentThread().getName();
         }
@@ -162,12 +162,18 @@ public class Player implements Runnable {
             checkForWin(hand);
         }
 
+        //testing
+        //System.out.println(Thread.currentThread().getName() + "  " +numTurns);
+
         try {
             while (!gameWon.get()) {
 
                 if (pickUpDeck.getDeck().size() != 0) {
 
                     turn(deckArray);
+
+                    //testing
+                    System.out.println(Thread.currentThread().getName() + "  " +numTurns);
 
                 } else {
 

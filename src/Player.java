@@ -15,6 +15,7 @@ public class Player implements Runnable {
     private static volatile ArrayList<CardDeck> deckArray;
     private static AtomicBoolean gameWon = new AtomicBoolean(false);
     private static String winner;
+    private static ArrayList<Boolean> initialCheck = new ArrayList<>();
 
 
     Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
@@ -130,12 +131,6 @@ public class Player implements Runnable {
         discardDeck.setDeck(deck);
     }
 
-
-    public ArrayList<Card> getHand() { //TODO method never used?????
-        return hand;
-    }
-
-
     public int getPlayerNum() {
         return playerNum;
     }
@@ -160,20 +155,20 @@ public class Player implements Runnable {
 
         synchronized (Player.class) {
             checkForWin(hand);
+            initialCheck.add(true);
         }
 
-        //testing
-        //System.out.println(Thread.currentThread().getName() + "  " +numTurns);
-
         try {
+
+            while (initialCheck.size() != totalNumPlayers) {
+                Thread.sleep(100);
+            }
+
             while (!gameWon.get()) {
 
                 if (pickUpDeck.getDeck().size() != 0) {
 
                     turn(deckArray);
-
-                    //testing
-                    System.out.println(Thread.currentThread().getName() + "  " +numTurns);
 
                 } else {
 
@@ -182,7 +177,7 @@ public class Player implements Runnable {
             }
         } catch (InterruptedException e) {
 
-            System.out.println("Interrupted!"); //TODO make a real catch statement?????
+            e.printStackTrace(); //TODO make a real catch statement????? comment that this never should occur, mention in documentation/report
         }
 
         while (numTurns < highestNumTurns) {
@@ -219,5 +214,12 @@ public class Player implements Runnable {
 
         outputText.add(myName + " exits");
         outputText.add(myName + " final hand: " + finalHand);
+
+        while (numTurns < highestNumTurns) {
+
+            if (pickUpDeck.getDeck().size() != 0) {
+                evenTurns();
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ public class Player implements Runnable {
     private static AtomicBoolean gameWon = new AtomicBoolean(false);
     private static String winner;
     private static ArrayList<Boolean> initialCheck = new ArrayList<>();
-
+    private static final Object lock = new Object();
 
     Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
 
@@ -150,19 +150,33 @@ public class Player implements Runnable {
 
         Thread.currentThread().setName("Player " + playerNum);
 
+        //testing
+        //System.out.println(Thread.currentThread().getName() + " in run");
+
         int pickUpDeckIndex = this.playerNum - 1;
         CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
 
-        synchronized (Player.class) {
+        synchronized (lock) {
+
             checkForWin(hand);
             initialCheck.add(true);
+
+            try {
+                if (initialCheck.size() < totalNumPlayers) {
+
+                    lock.wait();
+
+                } else {
+
+                    lock.notifyAll();
+                }
+
+            } catch (InterruptedException i) {
+                i.printStackTrace();   //TODO make a real catch statement????? comment that this never should occur, mention in documentation/report
+            }
         }
 
         try {
-
-            while (initialCheck.size() != totalNumPlayers) {
-                Thread.sleep(100);
-            }
 
             while (!gameWon.get()) {
 

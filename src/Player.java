@@ -77,20 +77,24 @@ public class Player implements Runnable {
 
     private static synchronized void checkForWin(ArrayList<Card> hand) {
 
-        boolean allEqual = true;
+        synchronized (Player.class) {
 
-        for (Card c : hand) {
+            boolean allEqual = true;
 
-            if (c.getValue() != hand.get(0).getValue()) {
+            for (Card c : hand) {
 
-                allEqual = false;
-                break;
+                if (c.getValue() != hand.get(0).getValue()) {
+
+                    allEqual = false;
+                    break;
+                }
             }
-        }
 
-        if (allEqual && !gameWon.get()) {
-            gameWon.set(true);
-            winner = Thread.currentThread().getName();
+            if (allEqual && !gameWon.get()) {
+
+                gameWon.set(true);
+                winner = Thread.currentThread().getName();
+            }
         }
     }
 

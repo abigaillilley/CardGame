@@ -1,7 +1,5 @@
 import Cards.*;
-import FileIO.Reader;
-import FileIO.Writer;
-
+import FileIO.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -11,13 +9,15 @@ import java.io.File;
 import java.io.IOException;
 
 
+/**
+ * cardGame is used to run the card game.
+ * All its functions are implemented in Library class
+ *
+ * @author Hongping Cai
+ * @version 2018-02-12
+ */
+public class CardGame {
 
-public class cardGame {
-
-    /**
-     * execute the program
-     *
-     */
     public static void main (String[] args){
 
         System.out.println("**************************************************");

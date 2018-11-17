@@ -10,11 +10,10 @@ import java.io.IOException;
 
 
 /**
- * cardGame is used to run the card game.
- * All its functions are implemented in Library class
+ * CardGame is used to execute the threaded card game.
  *
- * @author Hongping Cai
- * @version 2018-02-12
+ * @author 670032202
+ * @author 670048585
  */
 public class CardGame {
 
@@ -39,7 +38,7 @@ public class CardGame {
                     System.out.println("*** Your game has " + totalNumPlayers+ " players");
                     validTotalNumPlayers = true;
 
-                    packHolder = getPack(totalNumPlayers); //Integer array of card numbers
+                    packHolder = getPack(totalNumPlayers);
 
                     ArrayList<CardDeck> deckArray = distributeDeckCards(packHolder, totalNumPlayers);
                     ArrayList<Player> playerArray = distributePlayerCards(packHolder, totalNumPlayers, deckArray);
@@ -54,11 +53,11 @@ public class CardGame {
 
                     try {
                         for (Thread thread : threadArray) {
-                            thread.join();
+                            thread.join();                  //Main thread waits for all other threads to complete
                         }
                     } catch (InterruptedException e){
 
-                        e.printStackTrace(); //TODO do we want to do this here???
+                        e.printStackTrace();                //Threads not expected to be interrupted
                     }
 
                     try {
@@ -66,12 +65,14 @@ public class CardGame {
                         String userDir = System.getProperty("user.dir");
                         File outputFiles = new File("outputFiles");
 
-                        for(File file: outputFiles.listFiles()) { //this is fine, tested when folder was empty and still works soooo
+                        for (File file :  outputFiles.listFiles()) { //Deletes output files from previous game
+                                    //Directory outputFiles always exists, so NullPointerException will never be thrown
+
                             if (!file.isDirectory())
-                                file.delete();                  //this is fine
+                                file.delete();                     //Result ignored
                         }
 
-                        for (Player player: playerArray) {
+                        for (Player player: playerArray) {         //Creating uniquely named player output files
 
                             String playerFilename = "outputFiles/player" + player.getPlayerNum() + "_output.txt";
 
@@ -83,7 +84,7 @@ public class CardGame {
                             playerWriter.close();
                         }
 
-                        for (CardDeck deck: deckArray) {
+                        for (CardDeck deck: deckArray) {            //Creating uniquely named final deck output files
 
                             String deckFilename = "outputFiles/deck" + deck.getDeckNum() + "_output.txt";
 
@@ -115,13 +116,21 @@ public class CardGame {
         }
     }
 
-
+    /**
+     * Gets user input of a pack file and validates the pack with the following conditions:
+     *      - Length is 8 times the number of players
+     *      - All numbers are non-negative integers
+     *
+     * @param numPlayers Number of players
+     * @return Integer Arraylist holding a valid pack
+     */
     private static ArrayList<Integer> getPack(int numPlayers) {
 
         Boolean gotPack = false;
         String fileIn;
         ArrayList<Integer> packHolder = new ArrayList<>();
-        while (!gotPack) {
+
+        while (!gotPack) {                                           //Loops until a valid pack is input by the user
 
             fileIn = getInput("*** Please input a valid pack file:");
 
@@ -130,7 +139,7 @@ public class CardGame {
             fullPath = Paths.get(userDir, fileIn);
 
             try {
-                Boolean validPack = true;
+                Boolean validPack = true;                           //Assumes pack is valid
 
                 Reader packReader = new Reader(fullPath);
                 String[] pack = packReader.next();
@@ -138,20 +147,19 @@ public class CardGame {
                 while (pack != null) {
                     int testNum = Integer.parseInt(pack[0]);
 
-                    if (testNum > 0) {
+                    if (testNum >= 0) {                             //Number valid
 
-                        validPack = true;
                         packHolder.add(testNum);
 
                     } else {
-                        System.out.println("*** Invalid number (negative or zero) in pack");
-                        packHolder.clear();
+                        System.out.println("*** Invalid (negative) number found in pack");
+                        packHolder.clear();                         //Resets arrarylist for next pack the user inputs
                         validPack = false;
-                        break;
+                        break;                                      //Pack not valid, no need to check the rest
                     }
-
                     pack = packReader.next();
                 }
+
                 if (validPack) {
 
                     if (packHolder.size() == numPlayers*8) {
@@ -177,6 +185,15 @@ public class CardGame {
     }
 
 
+    /**
+     * Creates 'n' Player objects and distributes the first 4n cards among the players round-robin style.
+     * Add statement about the player's initial hand for the output file.
+     *
+     * @param pack              An valid pack in the form of an integer arraylist
+     * @param totalNumPlayers   Integer, total number of players
+     * @param deckArray         Arraylist of deck objects
+     * @return Arraylist of all player objects
+     */
     private static ArrayList<Player> distributePlayerCards(ArrayList<Integer> pack, int totalNumPlayers, ArrayList<CardDeck> deckArray) {
 
         ArrayList<Player> playerArray = new ArrayList<>();
@@ -185,7 +202,7 @@ public class CardGame {
 
             ArrayList<Card> hand = new ArrayList<>();
 
-            for (int j = i; j < (4*totalNumPlayers); j+=totalNumPlayers) {
+            for (int j = i; j < (4*totalNumPlayers); j+=totalNumPlayers) {          //Creates hand round-robin style
                 Card nextCard = new Card(pack.get(j));
                 hand.add(nextCard);
             }
@@ -199,6 +216,13 @@ public class CardGame {
     }
 
 
+    /**
+     * Creates 'n' CardDeck objects and distributes the second 4n cards among the decks round-robin style.
+     *
+     * @param pack              An valid pack in the form of an integer arraylist
+     * @param totalNumPlayers   Integer, total number of players
+     * @return Arraylist of all CardDeck objects
+     */
     private static ArrayList<CardDeck> distributeDeckCards(ArrayList<Integer> pack, int totalNumPlayers) {
 
         ArrayList<CardDeck> deckArray = new ArrayList<>();
@@ -206,10 +230,12 @@ public class CardGame {
         for (int i = 0; i < totalNumPlayers; i++) {
 
             int deckCardsStartIndex = (totalNumPlayers * 4);
+                                                     //Use second half of the pack (first half distributed to players)
 
             ArrayList<Card> deck = new ArrayList<>();
 
             for (int j = deckCardsStartIndex + i; j < (8 * totalNumPlayers); j += totalNumPlayers) {
+                                                    //Distribute cards round-robin style
                 Card nextCard = new Card(pack.get(j));
                 deck.add(nextCard);
             }
@@ -222,8 +248,9 @@ public class CardGame {
 
     /**
      * Displays a prompt and awaits next string user input.
-     * @param prompt The prompt to be given.
-     * @return The String the user returned.
+     *
+     * @param prompt    The prompt to be given.
+     * @return The String the user returned
      */
     private static String getInput(String prompt){
 

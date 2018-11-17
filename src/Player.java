@@ -46,51 +46,47 @@ public class Player implements Runnable {
      * Atomic method to simulate a player taking a turn.
      * Players prefer cards with the same denomination as their player number and hold onto these.
      * The oldest non-preferred card in the hand is discarded.
-     * @param pickUpDeck      CardDeck object to pick up card from
-     * @param discardDeck     CardDeck object to discard a card to
+     * @param deckArray   Array of all decks
      */
-    private void turn(CardDeck pickUpDeck, CardDeck discardDeck) {
+    private void turn(ArrayList<CardDeck> deckArray) {
 
         if (!gameWon.get()) {
 
+            int pickUpDeckIndex = this.playerNum - 1;
+            CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
 
-            ArrayList<Integer> testArray = new ArrayList<>();
-            for (Card card: pickUpDeck.getDeck()) {
-                testArray.add(card.getValue());
-            }
-            System.out.println(testArray);
             Card topCard = pickUp(pickUpDeck);
-            hand.add(topCard);
 
-            //testing
-            System.out.println(playerNum);
-            System.out.println(topCard.getValue());
+            if (topCard != null) {
 
-            addToOutput("Player " + playerNum + " draws " + topCard.getValue() + " from Deck " +
-                    playerNum);
+                hand.add(topCard);
+                addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " +
+                        getPlayerNum());
 
-            for (int i = 0; i < 4; i++) {
+                int discardDeckIndex = playerNum % totalNumPlayers;
+                CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
-                if (playerNum != hand.get(i).getValue()) {
-                                //If card value not of preferred denomination, discard it
-                    putDown(hand.get(i), discardDeck);
+                for (int i = 0; i < 4; i++) {
 
-                    addToOutput("Player " + playerNum + " discards " + hand.get(i).getValue() +
-                            " to Deck " + ((playerNum % totalNumPlayers) + 1));
-                    hand.remove(i);
+                    if (playerNum != hand.get(i).getValue()) {
 
-                    addToOutput("Player " + playerNum + " current hand: " + getHandValues());
+                        putDown(hand.get(i), discardDeck);
+                        addToOutput("Player " + getPlayerNum() + " discards " + hand.get(i).getValue() +
+                                " to Deck " + (discardDeckIndex + 1));
+                        hand.remove(i);
 
-                    break;
+                        addToOutput("Player " + getPlayerNum() + " current hand: " + getHandValues());
+
+                        break;
+                    }
                 }
-            }
+                numTurns += 1;
+                if (numTurns > highestNumTurns) {
+                    highestNumTurns = numTurns;
+                }
 
-            numTurns += 1;
-            if (numTurns > highestNumTurns) {
-                highestNumTurns = numTurns;
+                checkForWin(hand);
             }
-
-            checkForWin(hand);
         }
     }
 
@@ -240,9 +236,9 @@ public class Player implements Runnable {
 
         while (!gameWon.get()) {
 
-            if (pickUpDeck.getDeck().size() != 0) {     //Deck 'to the left' not empty
+            if (pickUpDeck.getDeck().size() != 0) {
 
-                turn(pickUpDeck, discardDeck);
+                turn(deckArray);
             }
         }
 

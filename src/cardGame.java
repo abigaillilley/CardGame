@@ -45,7 +45,7 @@ public class CardGame {
 
                     ArrayList<Thread> threadArray = new ArrayList<>();
 
-                    for (Player player: playerArray) {
+                    for (Player player: playerArray) {      //Creating a thread for each player
                         Thread playerThread = new Thread(player);
                         playerThread.start();
                         threadArray.add(playerThread);
@@ -65,11 +65,13 @@ public class CardGame {
                         String userDir = System.getProperty("user.dir");
                         File outputFiles = new File("outputFiles");
 
-                        for (File file :  outputFiles.listFiles()) { //Deletes output files from previous game
-                                    //Directory outputFiles always exists, so NullPointerException will never be thrown
-
-                            if (!file.isDirectory())
-                                file.delete();                     //Result ignored
+                        File[] files = outputFiles.listFiles();
+                        if (files != null) {
+                            for(File file : files) {
+                                if (!file.isDirectory()) {
+                                    file.delete();                     //Result ignored
+                                }
+                            }
                         }
 
                         for (Player player: playerArray) {         //Creating uniquely named player output files
@@ -92,8 +94,12 @@ public class CardGame {
                             deckPath = Paths.get(userDir, deckFilename);
 
                             ArrayList<Integer> cardNumbers = new ArrayList<>();
+
+                            try {
                             for (Card card: deck.getDeck()) {
                                 cardNumbers.add(card.getValue());
+                            } } catch (NullPointerException p) {
+                                System.out.println("caught Nullpointer");
                             }
 
                             ArrayList<String> deckOutput = new ArrayList<>();
@@ -153,7 +159,7 @@ public class CardGame {
 
                     } else {
                         System.out.println("*** Invalid (negative) number found in pack");
-                        packHolder.clear();                         //Resets arrarylist for next pack the user inputs
+                        packHolder.clear();                         //Resets arraylist for next pack the user inputs
                         validPack = false;
                         break;                                      //Pack not valid, no need to check the rest
                     }
@@ -168,6 +174,8 @@ public class CardGame {
 
                     } else {
                         System.out.println("*** Incorrect number of cards");
+                        packHolder.clear();
+
                     }
                 }
                 packReader.close();
@@ -179,6 +187,7 @@ public class CardGame {
             } catch (NumberFormatException e) {
 
                 System.out.println("*** Non integer value found in pack");
+                packHolder.clear();
             }
         }
         return packHolder;
@@ -186,8 +195,9 @@ public class CardGame {
 
 
     /**
-     * Creates 'n' Player objects and distributes the first 4n cards among the players round-robin style.
-     * Add statement about the player's initial hand for the output file.
+     * Creates 'n' Player objects and distributes four cards to each player round-robin style from the first half of
+     *      the deck.
+     * Adds statement about the player's initial hand for the output file.
      *
      * @param pack              An valid pack in the form of an integer arraylist
      * @param totalNumPlayers   Integer, total number of players
@@ -217,7 +227,8 @@ public class CardGame {
 
 
     /**
-     * Creates 'n' CardDeck objects and distributes the second 4n cards among the decks round-robin style.
+     * Creates 'n' CardDeck objects and distributes four cards the decks round-robin style from the second half of
+     *      the deck.
      *
      * @param pack              An valid pack in the form of an integer arraylist
      * @param totalNumPlayers   Integer, total number of players

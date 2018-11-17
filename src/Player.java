@@ -18,6 +18,7 @@ public class Player implements Runnable {
     private static ArrayList<Boolean> initialCheck = new ArrayList<>();
     private static final Object lock = new Object();
 
+
     Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
 
         hand = inputHand;
@@ -54,12 +55,7 @@ public class Player implements Runnable {
                                 " to Deck " + (discardDeckIndex + 1));
                         hand.remove(i);
 
-                        //testing TODO is this testing or legit code??????
-                        ArrayList<String> cardValues = new ArrayList<>();
-                        for (Card card : hand) {
-                            cardValues.add(Integer.toString(card.getValue()));
-                        }
-                        addToOutput("Player " + getPlayerNum() + " current hand: " + cardValues);
+                        addToOutput("Player " + getPlayerNum() + " current hand: " + getHandValues());
 
                         break;
                     }
@@ -75,7 +71,7 @@ public class Player implements Runnable {
     }
 
 
-    private static synchronized void checkForWin(ArrayList<Card> hand) {
+    private void checkForWin(ArrayList<Card> hand) {
 
         synchronized (Player.class) {
 
@@ -94,6 +90,17 @@ public class Player implements Runnable {
 
                 gameWon.set(true);
                 winner = Thread.currentThread().getName();
+
+                outputText.add(winner + " wins");
+
+                System.out.println("**************************************************");
+                System.out.println("**************************************************");
+                System.out.println("***              Player " + playerNum + " has won              ***");
+                System.out.println("**************************************************");
+                System.out.println("**************************************************");
+                System.out.println("***                  Game Over                 ***");
+                System.out.println("**************************************************");
+                System.out.println("**************************************************");
             }
         }
     }
@@ -139,6 +146,17 @@ public class Player implements Runnable {
         return playerNum;
     }
 
+    public ArrayList<Integer> getHandValues() {  //TODO make sure this is in the testing
+
+        ArrayList<Integer> handArray = new ArrayList<>();
+
+
+        for (Card card: hand) {
+            handArray.add(card.getValue());
+        }
+        return handArray;
+    }
+
 
     public ArrayList<String> getOutputText() {
         return outputText;
@@ -153,9 +171,6 @@ public class Player implements Runnable {
     public void run(){
 
         Thread.currentThread().setName("Player " + playerNum);
-
-        //testing
-        //System.out.println(Thread.currentThread().getName() + " in run");
 
         int pickUpDeckIndex = this.playerNum - 1;
         CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
@@ -180,22 +195,13 @@ public class Player implements Runnable {
             }
         }
 
-        try {
+        while (!gameWon.get()) {
 
-            while (!gameWon.get()) {
+            if (pickUpDeck.getDeck().size() != 0) {
 
-                if (pickUpDeck.getDeck().size() != 0) {
+                turn(deckArray);
 
-                    turn(deckArray);
-
-                } else {
-
-                    Thread.sleep(100);
-                }
             }
-        } catch (InterruptedException e) {
-
-            e.printStackTrace(); //TODO make a real catch statement????? comment that this never should occur, mention in documentation/report
         }
 
         while (numTurns < highestNumTurns) {
@@ -206,32 +212,14 @@ public class Player implements Runnable {
         }
 
         String myName = Thread.currentThread().getName();
-        if (myName.equals(winner)) {
 
-            outputText.add(myName + " wins");
-
-            System.out.println("**************************************************");
-            System.out.println("**************************************************");
-            System.out.println("***              Player " + playerNum + " has won              ***");
-            System.out.println("**************************************************");
-            System.out.println("**************************************************");
-            System.out.println("***                  Game Over                 ***");
-            System.out.println("**************************************************");
-            System.out.println("**************************************************");
-
-        } else {
+        if (!myName.equals(winner)) {
 
             outputText.add(winner + " has informed " + myName + " that " + winner + " has won");
         }
 
-        ArrayList<Integer> finalHand = new ArrayList<>();
-
-        for (Card card: hand) {
-            finalHand.add(card.getValue());
-        }
-
         outputText.add(myName + " exits");
-        outputText.add(myName + " final hand: " + finalHand);
+        outputText.add(myName + " final hand: " + getHandValues());
 
         while (numTurns < highestNumTurns) {
 

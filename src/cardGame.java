@@ -191,14 +191,8 @@ public class cardGame {
                 hand.add(nextCard);
             }
 
-            ArrayList<String> cardValues = new ArrayList<>();
-
-            for (Card card: hand) {
-                cardValues.add(Integer.toString(card.getValue()));
-            }
-
             Player player = new Player(hand, i+1, totalNumPlayers, deckArray);
-            player.addToOutput("Player " + player.getPlayerNum() + " initial hand: " + cardValues);
+            player.addToOutput("Player " + player.getPlayerNum() + " initial hand: " + player.getHandValues());
 
             playerArray.add(player);
         }

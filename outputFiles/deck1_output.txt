@@ -1,1 +1,1 @@
-Deck 1 contents: [51, 52, 53, 54]
+Deck 1 contents: [5, 5, 3, 4]

@@ -18,9 +18,9 @@ public class PlayerTest {
     @Test
     public void getOutputText() {
         // returns an arraylist
-        String expectedArray = { }
+        //String expectedArray = { }
 
-        void assertArrayEquals( expectedArray, resultArray);
+        //void assertArrayEquals( expectedArray, resultArray);
     }
 
 

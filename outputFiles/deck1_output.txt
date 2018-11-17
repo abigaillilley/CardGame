@@ -1,1 +1,1 @@
-Deck 1 contents: [8, 9, 6, 4]
+Deck 1 contents: [5, 0, 1, 5]

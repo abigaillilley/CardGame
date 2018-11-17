@@ -1,4 +1,4 @@
 Player 4 initial hand: [4, 4, 4, 4]
-Player 4 wins
+Player 2 has informed Player 4 that Player 2 has won
 Player 4 exits
 Player 4 final hand: [4, 4, 4, 4]

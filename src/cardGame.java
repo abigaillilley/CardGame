@@ -61,7 +61,6 @@ public class cardGame {
                         e.printStackTrace(); //TODO do we want to do this here???
                     }
 
-
                     try {
 
                         String userDir = System.getProperty("user.dir");
@@ -196,7 +195,6 @@ public class cardGame {
 
             playerArray.add(player);
         }
-
         return playerArray;
     }
 
@@ -218,7 +216,6 @@ public class cardGame {
 
             deckArray.add(new CardDeck(deck, i + 1));
         }
-
         return deckArray;
     }
 

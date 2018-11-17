@@ -21,20 +21,19 @@ public class Player implements Runnable {
     private static int initialCheck = 0;
     private static final Object lock = new Object();            //Used as a lock during the initial hand check
     private static volatile AtomicBoolean gameWon = new AtomicBoolean(false);
-    private int numTurns = 0;
     private static volatile int highestNumTurns = 0;
+    private int numTurns = 0;
     private static String winner;
     private ArrayList<String> outputText = new ArrayList<>();
 
     /**
      * Player constructor.
-     *
      * @param inputHand         Player's initial hand
-     * @param inputPlayerNum    Player's unique player number
+     * @param inputPlayerNum    unique player number
      * @param totalPlayers      Total number of players
      * @param inputCardDecks    Arraylist of all decks (CardDeck objects)
      */
-    Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
+    public Player(ArrayList<Card> inputHand, int inputPlayerNum, int totalPlayers, ArrayList<CardDeck> inputCardDecks) {
 
         hand = inputHand;
         playerNum = inputPlayerNum;
@@ -44,11 +43,9 @@ public class Player implements Runnable {
 
 
     /**
-     * Atomic method for when player takes a turn.
+     * Atomic method to simulate a player taking a turn.
      * Players prefer cards with the same denomination as their player number and hold onto these.
      * The oldest non-preferred card in the hand is discarded.
-     * If a card is picked up, a card is guaranteed to be discarded.
-     *
      * @param pickUpDeck      CardDeck object to pick up card from
      * @param discardDeck     CardDeck object to discard a card to
      */
@@ -56,21 +53,30 @@ public class Player implements Runnable {
 
         if (!gameWon.get()) {
 
+
+            ArrayList<Integer> testArray = new ArrayList<>();
+            for (Card card: pickUpDeck.getDeck()) {
+                testArray.add(card.getValue());
+            }
+            System.out.println(testArray);
             Card topCard = pickUp(pickUpDeck);
             hand.add(topCard);
 
-            addToOutput("Player " + getPlayerNum() + " draws " + topCard.getValue() + " from Deck " +
-                    getPlayerNum());
+            //testing
+            System.out.println(playerNum);
+            System.out.println(topCard.getValue());
+
+            addToOutput("Player " + playerNum + " draws " + topCard.getValue() + " from Deck " +
+                    playerNum);
 
             for (int i = 0; i < 4; i++) {
 
                 if (playerNum != hand.get(i).getValue()) {
                                 //If card value not of preferred denomination, discard it
                     putDown(hand.get(i), discardDeck);
-                    int playerNum = getPlayerNum();
 
                     addToOutput("Player " + playerNum + " discards " + hand.get(i).getValue() +
-                            " to Deck " + (playerNum + 1));
+                            " to Deck " + ((playerNum % totalNumPlayers) + 1));
                     hand.remove(i);
 
                     addToOutput("Player " + playerNum + " current hand: " + getHandValues());
@@ -78,12 +84,13 @@ public class Player implements Runnable {
                     break;
                 }
             }
-            checkForWin(hand);
 
             numTurns += 1;
             if (numTurns > highestNumTurns) {
                 highestNumTurns = numTurns;
             }
+
+            checkForWin(hand);
         }
     }
 
@@ -91,7 +98,6 @@ public class Player implements Runnable {
     /**
      * Checks if the cards in the hand all have the same value.
      * If they are, sets the class variable gameWon to true and prints an winning message to the terminal window.
-     *
      * @param hand  Player's current hand
      */
     private void checkForWin(ArrayList<Card> hand) {
@@ -109,7 +115,7 @@ public class Player implements Runnable {
                 }
             }
 
-            if (allEqual && !gameWon.get()) {   //Checks another player hasn't declared they've already won
+            if (allEqual && !gameWon.get()) {   //Checks another player hasn't already declared they've won
 
                 gameWon.set(true);
                 winner = Thread.currentThread().getName();
@@ -129,33 +135,69 @@ public class Player implements Runnable {
     }
 
 
+    /**
+     * Removes and returns top card from the deck.
+     * @param cardDeck  CardDeck to get the top card from
+     * @return Top card from from deck i.e. Card that's been in the deck the longest
+     */
     private Card pickUp(CardDeck cardDeck){
 
         ArrayList<Card> deck = cardDeck.getDeck();
 
         Card topCard = deck.get(0);
+                //Items shift down the Arraylist as lower indexed items are removed, so index 0 has the oldest card
         deck.remove(0);
 
         return topCard;
     }
 
-
+    /**
+     * Adds the card to the bottom of the deck.
+     * @param discardCard   Card to be discarded
+     * @param discardDeck   Deck to add the discarded card to
+     */
     private void putDown(Card discardCard, CardDeck discardDeck) {
 
         ArrayList<Card> deck = discardDeck.getDeck();
-        deck.add(discardCard);
+        deck.add(discardCard);                   //Adds to the end of the Arraylist
         discardDeck.setDeck(deck);
     }
 
+
+    /**
+     * Getter for a player's number
+     * @return Player's number
+     */
     public int getPlayerNum() {
         return playerNum;
     }
 
 
-    public ArrayList<Integer> getHandValues() {  //TODO make sure this is in the testing
+    /**
+     * Getter for a player's output text
+     * @return Arraylist of the player's output strings
+     */
+    public ArrayList<String> getOutputText() {
+        return outputText;
+    }
+
+
+    /**
+     * Adds a string to be output in the player's output file.
+     * @param text String to be added to the player's output ArrayList
+     */
+    public void addToOutput(String text) {
+        this.outputText.add(text);
+    }
+
+
+    /**
+     * Getter for the denominations of the cards in a player's hand
+     * @return Integer ArrayList of the card denominations in the player's hand
+     */
+    public ArrayList<Integer> getHandValues() {
 
         ArrayList<Integer> handArray = new ArrayList<>();
-
 
         for (Card card: hand) {
             handArray.add(card.getValue());
@@ -164,28 +206,21 @@ public class Player implements Runnable {
     }
 
 
-    public ArrayList<String> getOutputText() {
-        return outputText;
-    }
-
-
-    public void addToOutput(String text) {
-        this.outputText.add(text);
-    }
-
-
+    /**
+     * Runnable method that allows players to play simultaneously.
+     */
     public void run(){
 
         Thread.currentThread().setName("Player " + playerNum);
 
-        synchronized (lock) {
+        synchronized (lock) {                            //Ensures only one player declares they've won
 
             checkForWin(hand);
             initialCheck += 1;
 
             try {
                 if (initialCheck < totalNumPlayers) {
-
+                                                         //Wait until all players have completed an initial check
                     lock.wait();
 
                 } else {
@@ -194,26 +229,25 @@ public class Player implements Runnable {
                 }
 
             } catch (InterruptedException i) {
-                i.printStackTrace();   //TODO make a real catch statement????? comment that this never should occur, mention in documentation/report
+                i.printStackTrace();                     //Not expecting thread to be interrupted
             }
         }
 
-        int pickUpDeckIndex = playerNum - 1;
+        int pickUpDeckIndex = playerNum - 1;                        //Deck to player's 'left'
         CardDeck pickUpDeck = deckArray.get(pickUpDeckIndex);
-        int discardDeckIndex = playerNum % totalNumPlayers;
+        int discardDeckIndex = playerNum % totalNumPlayers;         //Deck to player's 'right'
         CardDeck discardDeck = deckArray.get(discardDeckIndex);
 
         while (!gameWon.get()) {
 
-            if (pickUpDeck.getDeck().size() != 0) {
+            if (pickUpDeck.getDeck().size() != 0) {     //Deck 'to the left' not empty
 
                 turn(pickUpDeck, discardDeck);
-
             }
         }
 
-        while (numTurns < highestNumTurns) {
-
+        while (numTurns < highestNumTurns) {            //For even decks at the end of the game, every player has to
+                                                        //take the same number of turns
             if (pickUpDeck.getDeck().size() != 0) {
 
                 putDown(pickUp(pickUpDeck), discardDeck);

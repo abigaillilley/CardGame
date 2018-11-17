@@ -1,4 +1,7 @@
-Player 1 initial hand: [2, 1, 1, 1]
-Player 4 has informed Player 1 that Player 4 has won
+Player 1 initial hand: [1, 4, 8, 5]
+Player 1 draws 6 from Deck 1
+Player 1 discards 4 to Deck 2
+Player 1 current hand: [1, 8, 5, 6]
+Player 3 has informed Player 1 that Player 3 has won
 Player 1 exits
-Player 1 final hand: [2, 1, 1, 1]
+Player 1 final hand: [1, 8, 5, 6]

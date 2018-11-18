@@ -35,5 +35,9 @@ public class CardDeckTest {
 
     @Test
     public void getDeckNum() {
+        int expectedDeckNum = 4;
+        // not done?
+
+        assertEquals(expectedDeckNum, testDeck.getDeckNum());
     }
 }

@@ -32,7 +32,7 @@ public class PlayerTest {
 
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
 
-        assertEquals(expectedArray, getOutputText());
+        assert(expectedArray, getOutputText());
     }
     @Test
     public void getHandValues() {

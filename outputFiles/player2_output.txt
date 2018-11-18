@@ -11,39 +11,6 @@ Player 2 current hand: [1, 4, 8, 9]
 Player 2 draws 6 from Deck 2
 Player 2 discards 1 to Deck 3
 Player 2 current hand: [4, 8, 9, 6]
-Player 2 draws 4 from Deck 2
-Player 2 discards 4 to Deck 3
-Player 2 current hand: [8, 9, 6, 4]
-Player 2 draws 8 from Deck 2
-Player 2 discards 8 to Deck 3
-Player 2 current hand: [9, 6, 4, 8]
-Player 2 draws 5 from Deck 2
-Player 2 discards 9 to Deck 3
-Player 2 current hand: [6, 4, 8, 5]
-Player 2 draws 6 from Deck 2
-Player 2 discards 6 to Deck 3
-Player 2 current hand: [4, 8, 5, 6]
-Player 2 draws 7 from Deck 2
-Player 2 discards 4 to Deck 3
-Player 2 current hand: [8, 5, 6, 7]
-Player 2 draws 8 from Deck 2
-Player 2 discards 8 to Deck 3
-Player 2 current hand: [5, 6, 7, 8]
-Player 2 draws 8 from Deck 2
-Player 2 discards 5 to Deck 3
-Player 2 current hand: [6, 7, 8, 8]
-Player 2 draws 6 from Deck 2
-Player 2 discards 6 to Deck 3
-Player 2 current hand: [7, 8, 8, 6]
-Player 2 draws 7 from Deck 2
-Player 2 discards 7 to Deck 3
-Player 2 current hand: [8, 8, 6, 7]
-Player 2 draws 8 from Deck 2
-Player 2 discards 8 to Deck 3
-Player 2 current hand: [8, 6, 7, 8]
-Player 2 draws 3 from Deck 2
-Player 2 discards 8 to Deck 3
-Player 2 current hand: [6, 7, 8, 3]
 Player 4 has informed Player 2 that Player 4 has won
 Player 2 exits
-Player 2 final hand: [6, 7, 8, 3]
+Player 2 final hand: [4, 8, 9, 6]

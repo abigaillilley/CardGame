@@ -10,6 +10,8 @@ public class PlayerTest {
     public void getPlayerNum() {
         // returns an integer greater than 0
         // for player num in player array
+
+        assertEquals("Cant be player zero", 1, 0);
     }
 
     @Test
@@ -21,9 +23,10 @@ public class PlayerTest {
     }
     @Test
     public void getHandValues() {
+        //give player a hand and assert that it returns
         // assert hand equals arraylist with 4 cards
-        ArrayList<Integer> expected = new ArrayList<>();
-        assertEquals(expected, Player.getHandValues());
+        ArrayList<Integer> expected = new ArrayList<Integer>();
+        //getHandValues(expected);
 
     }
     @Test

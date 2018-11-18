@@ -95,11 +95,8 @@ public class CardGame {
 
                             ArrayList<Integer> cardNumbers = new ArrayList<>();
 
-                            try {
                             for (Card card: deck.getDeck()) {
                                 cardNumbers.add(card.getValue());
-                            } } catch (NullPointerException p) {
-                                System.out.println("caught Nullpointer");
                             }
 
                             ArrayList<String> deckOutput = new ArrayList<>();

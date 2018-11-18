@@ -8,8 +8,11 @@ public class CardTest {
 
     @Test
     public void getValue() {
-        // int value greater than zero
 
+        int expected = 888;
+        Card testCard = new Card(expected);
+
+        assertEquals(expected, 888, testCard.getValue());
 
     }
 }

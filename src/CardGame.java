@@ -141,6 +141,9 @@ public class CardGame {
             String userDir = System.getProperty("user.dir");
             fullPath = Paths.get(userDir, fileIn);
 
+            //testing
+            System.out.println(fullPath);
+
             try {
                 Boolean validPack = true;                           //Assumes pack is valid
 

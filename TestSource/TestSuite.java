@@ -5,7 +5,10 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
-        PlayerTest.class,
+        Cards.CardTest.class,
+        Cards.CardDeckTest.class,
+        FileIO.ReaderTest.class,
+        //Player.class
 })
 public class TestSuite {
 

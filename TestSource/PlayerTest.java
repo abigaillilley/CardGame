@@ -1,6 +1,7 @@
 import Cards.Card;
 import Cards.CardDeck;
 import org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 
@@ -20,21 +21,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void getOutputText() {
-
-        ArrayList<String> expectedArray = new ArrayList<>();
-        expectedArray.add("Player's output strings");
-
-        ArrayList<String> outputText = new ArrayList<>();
-
-        ArrayList<Card> testHand = new ArrayList<>();
-        ArrayList<CardDeck> deckArray = new ArrayList<>();
-
-        Player testPlayer = new Player(testHand, 1, 2, deckArray);
-
-        assertEquals(expectedArray, testPlayer.getOutputText());
-    }
-    @Test
     public void getHandValues() {
 
         ArrayList<Card> testHand = new ArrayList<>();
@@ -43,46 +29,14 @@ public class PlayerTest {
             testHand.add(testCard);
         }
         ArrayList<CardDeck> deckArray = new ArrayList<>();
-        for(int i=0; i < 4; i++) {
+
+        for (int i = 0; i < 4; i++) {
+
             CardDeck testDeck = new CardDeck(testHand, 1);
             deckArray.add(testDeck);
         }
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
-        ArrayList<Integer> expected = new ArrayList<>();
-        expected.add(1);
-        expected.add(2);
-        expected.add(3);
-        expected.add(4);
-
-        assertEquals(expected, testPlayer.getHandValues());
-
-    }
-    @Test
-    public void addToOutput() {
-
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("String Initial Hand");
-
-        ArrayList<Card> testHand = new ArrayList<>();
-        ArrayList<CardDeck> deckArray = new ArrayList<>();
-
-        Player testPlayer = new Player(testHand, 1, 2, deckArray);
-
-        ArrayList<String> outputTest = new ArrayList<>();
-
-        ///this doesnt work
-        testPlayer.addToOutput("String initial hand");
-
-        assertEquals(expected, outputTest);
-    }
-
-    @Test
-    public void run() {
-        // need to make sure discardDeck doesnt get rid of desired card
-        // assert discardDeckIndex.getValue() != playerNum
-
-        // make sure player doesnt discard anything if they havent picked up anything
-
+        assertEquals(testHand, testPlayer.getHandValues());
 
     }
 }

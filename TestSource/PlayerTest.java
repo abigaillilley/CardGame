@@ -70,7 +70,7 @@ public class PlayerTest {
 
         ArrayList<String> outputTest = new ArrayList<>();
 
-        ///doesnt work
+        ///this doesnt work
         testPlayer.addToOutput("String initial hand");
 
         assertEquals(expected, outputTest);

@@ -23,10 +23,12 @@ public class PlayerTest {
     @Test
     public void getHandValues() {
 
+        ArrayList<Integer> testArray = new ArrayList<>();
         ArrayList<Card> testHand = new ArrayList<>();
         for(int i=1; i < 5; i++) {
             Card testCard = new Card(i);
             testHand.add(testCard);
+            testArray.add(i);
         }
         ArrayList<CardDeck> deckArray = new ArrayList<>();
 
@@ -36,7 +38,7 @@ public class PlayerTest {
             deckArray.add(testDeck);
         }
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
-        assertEquals(testHand, testPlayer.getHandValues());
+        assertEquals(testArray, testPlayer.getHandValues());
 
     }
 }

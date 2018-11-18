@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
         Cards.CardTest.class,
         Cards.CardDeckTest.class,
         FileIO.ReaderTest.class,
-        //Player.class
+        PlayerTest.class
 })
 public class TestSuite {
 

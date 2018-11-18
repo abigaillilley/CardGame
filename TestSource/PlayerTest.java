@@ -10,35 +10,44 @@ public class PlayerTest {
 
     @Test
     public void getPlayerNum() {
+        ArrayList<Card> testHand = new ArrayList<>();
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
 
-        // for player num in player array
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+        int expected = 1;
 
-        assertEquals("Cant be player zero", 1, 0);
+        assertEquals(expected, testPlayer.getPlayerNum());
     }
 
     @Test
     public void getOutputText() {
-        // returns an arraylist
-        //String expectedArray = { }
 
-        //void assertArrayEquals( expectedArray, resultArray);
+        ArrayList<String> expectedArray = new ArrayList<>();
+        expectedArray.add("Player's output strings");
+
+        ArrayList<String> outputText = new ArrayList<>();
+
+        ArrayList<Card> testHand = new ArrayList<>();
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
+
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+
+        assertEquals(expectedArray, getOutputText());
     }
     @Test
     public void getHandValues() {
-        ArrayList<Card> testHand = new ArrayList<>();
 
+        ArrayList<Card> testHand = new ArrayList<>();
         for(int i=1; i < 5; i++) {
             Card testCard = new Card(i);
             testHand.add(testCard);
         }
-
         ArrayList<CardDeck> deckArray = new ArrayList<>();
         for(int i=0; i < 4; i++) {
             CardDeck testDeck = new CardDeck(testHand, 1);
             deckArray.add(testDeck);
         }
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
-
         ArrayList<Integer> expected = new ArrayList<>();
         expected.add(1);
         expected.add(2);
@@ -51,6 +60,8 @@ public class PlayerTest {
     @Test
     public void addToOutput() {
         // make sure input is added
+
+        assertEquals();
     }
 
     @Test

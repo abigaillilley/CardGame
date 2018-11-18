@@ -141,7 +141,7 @@ public class CardGame {
             String userDir = System.getProperty("user.dir");
             fullPath = Paths.get(userDir, fileIn);
 
-            //testing
+            //testing why are you running
             System.out.println(fullPath);
 
             try {

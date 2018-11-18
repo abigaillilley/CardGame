@@ -63,7 +63,7 @@ public class CardGame {
                     try {
 
                         String userDir = System.getProperty("user.dir");
-                        File outputFiles = new File("outputFiles");
+                        File outputFiles = new File("../outputFiles");
 
                         File[] files = outputFiles.listFiles();
                         if (files != null) {
@@ -76,7 +76,7 @@ public class CardGame {
 
                         for (Player player: playerArray) {         //Creating uniquely named player output files
 
-                            String playerFilename = "outputFiles/player" + player.getPlayerNum() + "_output.txt";
+                            String playerFilename = "../outputFiles/player" + player.getPlayerNum() + "_output.txt";
 
                             Path playerPath;
                             playerPath = Paths.get(userDir, playerFilename);
@@ -88,7 +88,7 @@ public class CardGame {
 
                         for (CardDeck deck: deckArray) {            //Creating uniquely named final deck output files
 
-                            String deckFilename = "outputFiles/deck" + deck.getDeckNum() + "_output.txt";
+                            String deckFilename = "../outputFiles/deck" + deck.getDeckNum() + "_output.txt";
 
                             Path deckPath;
                             deckPath = Paths.get(userDir, deckFilename);
@@ -135,14 +135,11 @@ public class CardGame {
 
         while (!gotPack) {                                           //Loops until a valid pack is input by the user
 
-            fileIn = getInput("*** Please input a valid pack file:");
+            fileIn = getInput("*** Please input a valid pack file:"); //path must be relative to this file
 
             Path fullPath;
             String userDir = System.getProperty("user.dir");
             fullPath = Paths.get(userDir, fileIn);
-
-            //testing why are you running
-            System.out.println(fullPath);
 
             try {
                 Boolean validPack = true;                           //Assumes pack is valid

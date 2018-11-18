@@ -23,7 +23,7 @@ USER INSTRUCTIONS:
 1. Run the project via the executable file CardGame.java
 2. Input the number of players
 3. Input the path to the .txt pack file relative to the file CardGame.java. 
-    E.g. File: 4pWinDeck Input: 'testFiles/4pWinDeck.txt'
+    E.g. File: 4pWinDeck Input: '../testFiles/4pWinDeck.txt'
 4. The terminal will output the winner of the game and then say that the game is over 
 ex.
 ***              Player 2 has won              ***

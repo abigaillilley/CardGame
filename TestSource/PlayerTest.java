@@ -32,7 +32,7 @@ public class PlayerTest {
 
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
 
-        //assertEquals(expectedArray, getOutputText());
+        assertEquals(expectedArray, getOutputText());
     }
     @Test
     public void getHandValues() {
@@ -59,9 +59,17 @@ public class PlayerTest {
     }
     @Test
     public void addToOutput() {
-        // make sure input is added
 
-        //assertEquals();
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("String Initial Hand");
+
+        ArrayList<Card> testHand = new ArrayList<>();
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
+
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+        ArrayList<String> outputTest = new ArrayList<>();
+        testPlayer.addToOutput("String initial hand");
+        assertEquals(expected, testPlayer.outputTest);
     }
 
     @Test
@@ -70,6 +78,7 @@ public class PlayerTest {
         // assert discardDeckIndex.getValue() != playerNum
 
         // make sure player doesnt discard anything if they havent picked up anything
+
 
     }
 }

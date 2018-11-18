@@ -31,6 +31,7 @@ public class PlayerTest {
     }
     @Test
     public void addToOutput() {
+        // make sure input is added
     }
 
     @Test

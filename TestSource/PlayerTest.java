@@ -32,7 +32,7 @@ public class PlayerTest {
 
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
 
-        assert(expectedArray, getOutputText());
+        assertEquals(expectedArray, testPlayer.getOutputText());
     }
     @Test
     public void getHandValues() {
@@ -67,9 +67,13 @@ public class PlayerTest {
         ArrayList<CardDeck> deckArray = new ArrayList<>();
 
         Player testPlayer = new Player(testHand, 1, 2, deckArray);
+
         ArrayList<String> outputTest = new ArrayList<>();
+
+        ///doesnt work
         testPlayer.addToOutput("String initial hand");
-        assertEquals(expected, testPlayer.outputTest);
+
+        assertEquals(expected, outputTest);
     }
 
     @Test

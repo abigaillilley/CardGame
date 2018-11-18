@@ -34,5 +34,5 @@ are named deck1_output.txt or player1_output.txt etc. The Deck output files will
 one line indicating the final cards in that deck. The winning player n will be announced in each
 output file, followed by each player exiting along with their hand upon exit.
 
-
+6. Running test suite: 
 (what is required to run this project)

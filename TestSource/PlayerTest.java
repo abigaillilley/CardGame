@@ -1,3 +1,5 @@
+import Cards.Card;
+import Cards.CardDeck;
 import org.junit.Assert.*;
 import org.junit.Test;
 import java.util.ArrayList;
@@ -8,30 +10,58 @@ public class PlayerTest {
 
     @Test
     public void getPlayerNum() {
-        // returns an integer greater than 0
-        // for player num in player array
+        ArrayList<Card> testHand = new ArrayList<>();
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
 
-        assertEquals("Cant be player zero", 1, 0);
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+        int expected = 1;
+
+        assertEquals(expected, testPlayer.getPlayerNum());
     }
 
     @Test
     public void getOutputText() {
-        // returns an arraylist
-        //String expectedArray = { }
 
-        //void assertArrayEquals( expectedArray, resultArray);
+        ArrayList<String> expectedArray = new ArrayList<>();
+        expectedArray.add("Player's output strings");
+
+        ArrayList<String> outputText = new ArrayList<>();
+
+        ArrayList<Card> testHand = new ArrayList<>();
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
+
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+
+        assertEquals(expectedArray, getOutputText());
     }
     @Test
     public void getHandValues() {
-        //give player a hand and assert that it returns
-        // assert hand equals arraylist with 4 cards
-        ArrayList<Integer> expected = new ArrayList<Integer>();
-        //getHandValues(expected);
+
+        ArrayList<Card> testHand = new ArrayList<>();
+        for(int i=1; i < 5; i++) {
+            Card testCard = new Card(i);
+            testHand.add(testCard);
+        }
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
+        for(int i=0; i < 4; i++) {
+            CardDeck testDeck = new CardDeck(testHand, 1);
+            deckArray.add(testDeck);
+        }
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+        ArrayList<Integer> expected = new ArrayList<>();
+        expected.add(1);
+        expected.add(2);
+        expected.add(3);
+        expected.add(4);
+
+        assertEquals(expected, testPlayer.getHandValues());
 
     }
     @Test
     public void addToOutput() {
         // make sure input is added
+
+        assertEquals();
     }
 
     @Test

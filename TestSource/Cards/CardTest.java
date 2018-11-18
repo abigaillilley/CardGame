@@ -12,7 +12,7 @@ public class CardTest {
         int expected = 888;
         Card testCard = new Card(expected);
 
-        assertEquals(expected, 888, testCard.getValue());
+        assertEquals(expected, testCard.getValue());
 
     }
 }

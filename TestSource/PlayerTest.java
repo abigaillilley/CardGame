@@ -1,3 +1,5 @@
+import Cards.Card;
+import Cards.CardDeck;
 import org.junit.Assert.*;
 import org.junit.Test;
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ public class PlayerTest {
 
     @Test
     public void getPlayerNum() {
-        // returns an integer greater than 0
+
         // for player num in player array
 
         assertEquals("Cant be player zero", 1, 0);
@@ -23,10 +25,27 @@ public class PlayerTest {
     }
     @Test
     public void getHandValues() {
-        //give player a hand and assert that it returns
-        // assert hand equals arraylist with 4 cards
-        ArrayList<Integer> expected = new ArrayList<Integer>();
-        //getHandValues(expected);
+        ArrayList<Card> testHand = new ArrayList<>();
+
+        for(int i=1; i < 5; i++) {
+            Card testCard = new Card(i);
+            testHand.add(testCard);
+        }
+
+        ArrayList<CardDeck> deckArray = new ArrayList<>();
+        for(int i=0; i < 4; i++) {
+            CardDeck testDeck = new CardDeck(testHand, 1);
+            deckArray.add(testDeck);
+        }
+        Player testPlayer = new Player(testHand, 1, 2, deckArray);
+
+        ArrayList<Integer> expected = new ArrayList<>();
+        expected.add(1);
+        expected.add(2);
+        expected.add(3);
+        expected.add(4);
+
+        assertEquals(expected, testPlayer.getHandValues());
 
     }
     @Test

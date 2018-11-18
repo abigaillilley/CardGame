@@ -1,0 +1,34 @@
+Player 2 initial hand: [4, 2, 3, 3]
+Player 2 draws 8 from Deck 2
+Player 2 discards 4 to Deck 1
+Player 2 current hand: [2, 3, 3, 8]
+Player 2 draws 1 from Deck 2
+Player 2 discards 3 to Deck 1
+Player 2 current hand: [2, 3, 8, 1]
+Player 2 draws 5 from Deck 2
+Player 2 discards 3 to Deck 1
+Player 2 current hand: [2, 8, 1, 5]
+Player 2 draws 5 from Deck 2
+Player 2 discards 8 to Deck 1
+Player 2 current hand: [2, 1, 5, 5]
+Player 2 draws 3 from Deck 2
+Player 2 discards 1 to Deck 1
+Player 2 current hand: [2, 5, 5, 3]
+Player 2 draws 4 from Deck 2
+Player 2 discards 5 to Deck 1
+Player 2 current hand: [2, 5, 3, 4]
+Player 2 draws 2 from Deck 2
+Player 2 discards 5 to Deck 1
+Player 2 current hand: [2, 3, 4, 2]
+Player 2 draws 2 from Deck 2
+Player 2 discards 3 to Deck 1
+Player 2 current hand: [2, 4, 2, 2]
+Player 2 draws 4 from Deck 2
+Player 2 discards 4 to Deck 1
+Player 2 current hand: [2, 2, 2, 4]
+Player 2 draws 2 from Deck 2
+Player 2 discards 4 to Deck 1
+Player 2 current hand: [2, 2, 2, 2]
+Player 2 wins
+Player 2 exits
+Player 2 final hand: [2, 2, 2, 2]

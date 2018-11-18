@@ -23,6 +23,9 @@ Player 3 current hand: [3, 5, 3, 3]
 Player 3 draws 1 from Deck 3
 Player 3 discards 5 to Deck 4
 Player 3 current hand: [3, 3, 3, 1]
+Player 3 draws 4 from Deck 3
+Player 3 discards 1 to Deck 4
+Player 3 current hand: [3, 3, 3, 4]
 Player 4 has informed Player 3 that Player 4 has won
 Player 3 exits
-Player 3 final hand: [3, 3, 3, 1]
+Player 3 final hand: [3, 3, 3, 4]

@@ -27,17 +27,9 @@ public class CardDeckTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void setDeck() {
-        //ArrayList<Card>
-        //testDeck.setDeck();
-    }
 
     @Test
     public void getDeckNum() {
-        int expectedDeckNum = 4;
-        // not done?
-
-        assertEquals(expectedDeckNum, testDeck.getDeckNum());
+        assertEquals(888, testDeck.getDeckNum());
     }
 }
